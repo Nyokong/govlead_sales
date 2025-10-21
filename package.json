@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "migrate && next build --turbopack && seed:admin && seed:staff",
+    "build": "drizzle-kit generate && drizzle-kit push && next build --turbopack && seed:admin && seed:staff",
     "migrate": "drizzle-kit generate && drizzle-kit push",
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx",
