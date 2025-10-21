@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { ThemeContext } from "@/context/themeContext";
 import Header from "@/components/reuseables/header";
+import { motion } from "motion/react";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
@@ -39,7 +40,13 @@ export default function Dashboard() {
         <div
           className={`font-sans flex flex-col py-[30px] md:flex-row items-center justify-center min-h-[20vh] pb-20 gap-2 sm:p-20 px-10 `}
         >
-          <div className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl w-[340px] md:w-[400px] md:min-h-[400px]">
+          <motion.div
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0.2 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl w-[340px] md:w-[400px] md:min-h-[400px]"
+          >
             <div className="p-3.5 flex flex-row justify-center items-center gap-[10px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[20px] sm:px-[40px]">
               <Label className="text-[#ffffff] py-2 px-4 bg-[#2929298f] rounded-2xl">
                 Email
@@ -52,8 +59,14 @@ export default function Dashboard() {
             <div className="p-3.5 flex flex-row gap-[20px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[40px]">
               <Label className=" text-black dark:text-white">settings</Label>
             </div>
-          </div>
-          <div className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl md:w-[400px] w-[340px] md:min-h-[400px]">
+          </motion.div>
+          <motion.div
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0.2 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl md:w-[400px] w-[340px] md:min-h-[400px]"
+          >
             <div className="p-3.5 flex flex-row gap-[20px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[40px]">
               <Label>Menu</Label>
             </div>
@@ -66,7 +79,7 @@ export default function Dashboard() {
               <Separator />
               <Label className="justify-self-end">Contacts</Label>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     );

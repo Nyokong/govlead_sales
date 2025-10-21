@@ -15,7 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import { ThemeContext } from "@/context/themeContext";
 import { useTheme } from "next-themes";
 import SignOutButton from "./logout/logout";
-import { Button } from "../ui/button";
 import { Ring } from "ldrs/react";
 
 export default function header() {
