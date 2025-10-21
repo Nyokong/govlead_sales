@@ -56,6 +56,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
+      email: email;
       role: string;
     } & DefaultSession["staff"];
   }

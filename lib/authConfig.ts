@@ -31,7 +31,7 @@ export default {
           .from(users)
           .where(eq(users.email, email))
           .limit(1)
-          .then((res: any[]) => res[0]);
+          .then((res) => res[0]);
 
         if (user) {
           return {

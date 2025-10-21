@@ -1,11 +1,10 @@
 // import Image from "next/image";
 "use client";
 
-import Header from "@/components/reuseables/header";
 import { SignIn } from "@/components/reuseables/login/login";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import Loading from "./loading";
 
 export default function Home() {
