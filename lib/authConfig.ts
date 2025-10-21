@@ -36,6 +36,8 @@ export default {
         if (user) {
           return {
             id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
             email: user.email,
             role: user.role,
           };

@@ -10,7 +10,7 @@ export default function header() {
     <div className="w-full md:px-[5%] lg:px-[10%] ">
       <div className="flex flex-row w-full items-center justify-between ">
         {/** Logo image */}
-        <div className="flex justify-center items-center h-[80px] w-auto bg-[#fff] object-cover">
+        <div className="flex justify-center items-center h-[80px] w-auto  object-cover">
           <Link href={"/"}>
             <Image
               src={"/parent_logo.png"}

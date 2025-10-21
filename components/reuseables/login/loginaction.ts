@@ -27,6 +27,7 @@ export async function loginAction(
       redirect: false,
       email,
       password,
+      callbackUrl: "/dashboard",
     });
 
     if (res?.error) {

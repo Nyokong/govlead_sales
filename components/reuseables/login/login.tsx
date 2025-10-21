@@ -23,7 +23,7 @@ export function SignIn() {
             src={"/parent_logo.png"}
             width={180}
             height={180}
-            className="object-fill"
+            className="object-fill "
             alt="parent_logo_image"
           />
         </div>
@@ -35,7 +35,7 @@ export function SignIn() {
             name="email"
             type="email"
             placeholder="enter your email"
-            className="w-[250px] h-[40px] rounded-3xl inset-shadow-sm inset-shadow-black-900"
+            className="w-[250px] h-[40px] bg-blue-50 rounded-3xl inset-shadow-sm inset-shadow-black-900"
           />
 
           <Label className="flex flex-row gap-2 justify-center h-[30px] m-2">
@@ -45,7 +45,7 @@ export function SignIn() {
             name="password"
             type="password"
             placeholder="enter your password"
-            className="w-[250px] h-[40px] rounded-3xl inset-shadow-sm inset-shadow-black-900"
+            className="w-[250px] h-[40px] bg-blue-50 rounded-3xl inset-shadow-sm inset-shadow-black-900"
           />
 
           <div className="flex justify-center mt-2">

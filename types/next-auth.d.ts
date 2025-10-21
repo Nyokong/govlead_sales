@@ -35,10 +35,20 @@ type UserRole = "admin" | "staff";
 // };
 
 import NextAuth from "next-auth";
+type UserData = {
+  id: string;
+  email: email;
+  role?: string;
+  firstname?: string | null;
+  lastname?: string | null;
+  image?: string | null;
+};
 
 declare module "@auth/core/types" {
   interface AdapterUser {
     id: number;
+    firstname?: string | null;
+    lastname?: string | null;
     email: string;
     role?: string;
   }
@@ -51,15 +61,14 @@ declare module "next-auth" {
     id: string;
     email: email;
     role?: string;
+    firstname?: string | null;
+    lastname?: string | null;
+    image?: string | null;
   }
 
-  interface Session {
-    user: {
-      id: string;
-      email: email;
-      role: string;
-    } & DefaultSession["staff"];
-  }
+  // interface Session {
+  //   user: UserData & DefaultSession["staff"];
+  // }
 }
 
 declare module "@auth/core/jwt" {
