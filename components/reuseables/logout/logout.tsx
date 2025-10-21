@@ -1,21 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import { signOut } from "next-auth/react";
-import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
 
 type SignOutButtonProps = {
-  email: string;
   children: React.ReactNode;
 };
 
-export default function SignOutButton({ email, children }: SignOutButtonProps) {
-  const [isSigningOut, setIsSigningOut] = useState(false);
-
+export default function SignOutButton({ children }: SignOutButtonProps) {
   const handleSignOut = async () => {
-    setIsSigningOut(true);
-
     const logout = await signOut({
       redirect: false,
     });
