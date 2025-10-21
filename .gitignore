@@ -19,7 +19,7 @@
 
 # production
 /build
-./migrations
+# ./migrations
 
 # misc
 .DS_Store

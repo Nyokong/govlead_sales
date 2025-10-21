@@ -62,13 +62,16 @@ const staffAccounts = [
 ];
 
 async function seedStaff() {
-  const existing = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, "Tshego@govleadgroup.co.za"));
-  if (existing.length === 0) {
-    // if nothing hash the password
-    for (const entry of staffAccounts) {
+  // if nothing hash the password
+  for (const entry of staffAccounts) {
+    const existing = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, `${entry.email}`));
+
+    if (existing.length > 0) {
+      console.log("Staff already exists");
+    } else {
       // staffAccounts.map(async (entry) => {
       const hash = await bcrypt.hash(`${entry.password}`, 10);
       await db.insert(users).values({
@@ -80,10 +83,7 @@ async function seedStaff() {
         password: `${hash}`,
         secretcode: `${entry.secretcode}`,
       });
-      // });
     }
-  } else {
-    console.log("Staff already exists");
   }
 
   console.log("Staff seeded");
