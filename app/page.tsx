@@ -16,8 +16,8 @@ export default function Home() {
 
   if (status == "loading") {
     return (
-      <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center h-[100vh] p-8 pb-20 gap-16 sm:p-20 bg-amber-300">
-        <div className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+      <div className="font-sans flex items-center justify-items-center h-[80vh] w-[400px] md:w-[1000px] p-8 pb-20 gap-16 sm:p-20">
+        <div className="flex  items-center sm:items-start p-[30px] rounded-4xl bg-white inset-shadow-sm inset-shadow-black-200 shadow-sm">
           <Loading />
         </div>
       </div>
@@ -25,13 +25,13 @@ export default function Home() {
   }
 
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center h-[100vh] p-8 pb-20 gap-16 sm:p-20">
+    <div className="font-sans flex justify-center items-center h-[80vh]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <SignIn />
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+      {/* <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         Some Footer
-      </footer>
+      </footer> */}
     </div>
   );
 }

@@ -3,10 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 export default function header() {
   return (
-    <div className="w-full md:px-[5%] lg:px-[10%] bg-[#6c72c0]">
+    <div className="w-full md:px-[5%] lg:px-[10%] ">
       <div className="flex flex-row w-full items-center justify-between ">
         {/** Logo image */}
         <div className="flex justify-center items-center h-[80px] w-auto bg-[#fff] object-cover">
@@ -25,7 +26,9 @@ export default function header() {
         <div className="hidden md:flex bg-amber-700"></div>
 
         {/* Small navigation screens */}
-        <div className="flex md:hidden bg-amber-800 h-[60px] w-[80px] mx-[15px]"></div>
+        <div className="flex md:hidden h-[60px] w-[80px] mx-[15px] justify-center items-center">
+          <GiHamburgerMenu size={"30px"} color="#000000" />
+        </div>
 
         {/** first header section */}
       </div>
