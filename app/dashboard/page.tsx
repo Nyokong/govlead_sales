@@ -17,7 +17,7 @@ export default function Dashboard() {
 
   if (status == "loading") {
     return (
-      <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <div className="font-sans flex items-center justify-center w-[100dvw] min-h-[60vh] p-8 pb-20 gap-16 sm:p-20">
         <div className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
           <Loading />
         </div>
@@ -31,9 +31,9 @@ export default function Dashboard() {
 
   if (session?.user) {
     return (
-      <div className="font-sans flex flex-col md:flex-row items-center justify-center min-h-[20vh] p-3 pb-20 gap-2 sm:p-10">
+      <div className="font-sans flex flex-col md:flex-row items-center justify-center min-h-[20vh] pb-20 gap-2 sm:p-20 px-10">
         <div className="flex flex-col gap-2 bg-[#ffffff] p-2 rounded-2xl md:w-[400px] md:min-h-[400px]">
-          <div className="p-3.5 flex flex-row gap-[20px] bg-white rounded-2xl shadow-sm inset-shadow-xs px-[40px]">
+          <div className="p-3.5 flex flex-row justify-center items-center gap-[10px] bg-white rounded-2xl shadow-sm inset-shadow-xs px-[20px] sm:px-[40px]">
             <Label className="text-[#ffffff] py-2 px-4 bg-[#2929298f] rounded-2xl">
               Email
             </Label>{" "}

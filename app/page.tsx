@@ -16,7 +16,7 @@ export default function Home() {
 
   if (status == "loading") {
     return (
-      <div className="font-sans absolute z-10 flex items-center justify-center h-[100%] w-screen p-8 pb-20 gap-16 sm:p-20">
+      <div className="font-sans absolute z-10 flex items-center justify-center h-[60vh] w-screen p-8 pb-20 gap-16 sm:p-20">
         <div className="flex  items-center sm:items-start p-[30px] rounded-4xl bg-white inset-shadow-sm inset-shadow-black-200 shadow-sm">
           <Loading />
         </div>
