@@ -4,6 +4,7 @@ import { users } from "../db/schema";
 import bcrypt from "bcrypt";
 
 import dotenv from "dotenv";
+import { nanoid } from "nanoid";
 dotenv.config();
 
 const db = drizzle(`${process.env.DATABASE_URL!}`);
@@ -67,9 +68,11 @@ async function seedStaff() {
     .where(eq(users.email, "Tshego@govleadgroup.co.za"));
   if (existing.length === 0) {
     // if nothing hash the password
-    staffAccounts.map(async (entry) => {
+    for (const entry of staffAccounts) {
+      // staffAccounts.map(async (entry) => {
       const hash = await bcrypt.hash(`${entry.password}`, 10);
       await db.insert(users).values({
+        id: nanoid(),
         firstname: `${entry.firstname}`,
         lastname: `${entry.lastname}`,
         email: `${entry.email}`,
@@ -77,12 +80,13 @@ async function seedStaff() {
         password: `${hash}`,
         secretcode: `${entry.secretcode}`,
       });
-    });
-
-    console.log("Staff seeded");
+      // });
+    }
   } else {
     console.log("Staff already exists");
   }
+
+  console.log("Staff seeded");
 }
 
 seedStaff().catch((err) => {

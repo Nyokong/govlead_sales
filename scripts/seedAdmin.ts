@@ -24,6 +24,7 @@ async function seedSuperAdmin() {
       password: `${hash}`,
       secretcode: "kx1234",
     });
+
     console.log("Super admin seeded");
   } else {
     console.log("Super admin already exists");
