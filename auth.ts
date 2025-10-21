@@ -6,7 +6,6 @@ import { db } from "@/db";
 import authConfig from "@/lib/authConfig";
 
 import * as schema from "@/db/schema";
-import { drizzleAdapter } from "./lib/drizzle-adapter";
 
 export const {
   auth,
