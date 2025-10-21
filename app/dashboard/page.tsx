@@ -9,13 +9,13 @@ import { Ring } from "ldrs/react";
 import { Label } from "@/components/ui/label";
 import { redirect } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
-import { ThemeContext } from "@/context/themeContext";
+// import { ThemeContext } from "@/context/themeContext";
 import Header from "@/components/reuseables/header";
 import { motion } from "motion/react";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
-  const { currentTheme } = useContext(ThemeContext);
+  // const { currentTheme } = useContext(ThemeContext);
 
   const [generate, setGenerate] = useState(false);
 
