@@ -15,6 +15,7 @@ const id = nanoid();
 export const users = pgTable("users", {
   id: text("uID")
     .primaryKey()
+    .unique()
     .$defaultFn(() => id),
   firstname: text("firstname"),
   lastname: text("lastname"),
