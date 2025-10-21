@@ -17,7 +17,7 @@ export default function SignOutButton({ email, children }: SignOutButtonProps) {
     setIsSigningOut(true);
 
     const logout = await signOut({
-      redirect: false, // prevent automatic redirect
+      redirect: false,
     });
 
     if (logout) {
