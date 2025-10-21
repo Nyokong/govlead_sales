@@ -15,7 +15,7 @@ export const {
 } = NextAuth({
   adapter: DrizzleAdapter(db, schema as any),
   ...authConfig,
-  debug: true,
+  // debug: true,
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,

@@ -18,7 +18,7 @@ export function SignIn() {
   return (
     <div>
       <div className="flex flex-col justify-center items-center rounded-4xl py-[40px] h-auto sm:w-[400px] w-[320px]  bg-[#ffffff] shadow-sm inset-shadow-sm inset-shadow-black-900">
-        <div className="flex justify-center items-center h-[80px] w-auto bg-[#fff] object-cover">
+        <div className="flex justify-center items-center h-[80px] w-auto bg-[#fff] dark:bg-[#5c5c5c] object-cover">
           <Image
             src={"/parent_logo.png"}
             width={180}
@@ -28,7 +28,7 @@ export function SignIn() {
           />
         </div>
         <form action={formAction} className="flex flex-col gap-2 ">
-          <Label className="flex flex-row gap-2 justify-center h-[30px] m-2">
+          <Label className="flex flex-row gap-2 justify-center h-[30px] m-2 text-black dark:text-[#ffffff]">
             Email
           </Label>
           <Input
@@ -38,7 +38,7 @@ export function SignIn() {
             className="w-[250px] h-[40px] bg-blue-50 rounded-3xl inset-shadow-sm inset-shadow-black-900"
           />
 
-          <Label className="flex flex-row gap-2 justify-center h-[30px] m-2">
+          <Label className="flex flex-row gap-2 justify-center h-[30px] m-2 text-black dark:text-[#ffffff]">
             Password
           </Label>
           <Input
@@ -51,7 +51,7 @@ export function SignIn() {
           <div className="flex justify-center mt-2">
             <Button
               type="submit"
-              className="w-[200px] rounded-[50px] flex justify-center items-center h-[40px] cursor-pointer shadow-md inset-shadow-xs inset-shadow-gray-400 bg-[#202020]"
+              className="w-[200px] rounded-[50px] flex justify-center items-center text-black dark:text-[#ffffff] h-[40px] cursor-pointer shadow-md inset-shadow-xs inset-shadow-gray-400 bg-[#202020]"
             >
               {isPending ? (
                 <div className="flex flex-row gap-2 text-white">

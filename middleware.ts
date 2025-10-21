@@ -33,5 +33,6 @@ export const config = {
     "/",
     "/(api|trpc)(.*)",
     "/_next/internal",
+    "/_next/internal/helpers.ts",
   ],
 };
