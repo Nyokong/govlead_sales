@@ -1,6 +1,6 @@
 {
-  "id": "938b88d6-4c6f-4494-98bb-dd691db6a1f2",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "2e0460ac-729c-4cd9-bd8f-a57b9a762dfb",
+  "prevId": "938b88d6-4c6f-4494-98bb-dd691db6a1f2",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -8,6 +8,23 @@
       "name": "account",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "account_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
         "userID": {
           "name": "userID",
           "type": "text",

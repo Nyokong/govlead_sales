@@ -19,9 +19,12 @@ import { ThemeContext } from "@/context/themeContext";
 import { useTheme } from "next-themes";
 import SignOutButton from "./logout/logout";
 import { Ring } from "ldrs/react";
+import { useSession } from "next-auth/react";
 
 export default function header() {
   const { isOpen, setIsOpen } = useMenu();
+
+  const { data: session } = useSession();
 
   const { currentTheme, toggleTheme } = useContext(ThemeContext);
   const { theme, setTheme } = useTheme();
@@ -34,13 +37,23 @@ export default function header() {
         {/** Logo image */}
         <div className="flex justify-center items-center h-[80px] w-auto  object-cover">
           <Link href={"/"}>
-            <Image
-              src={"/parent_logo.png"}
-              width={180}
-              height={180}
-              className="object-fill"
-              alt="parent_logo_image"
-            />
+            {currentTheme == "dark" ? (
+              <Image
+                src={"/parent_logoWTrans.png"}
+                width={180}
+                height={180}
+                className="object-fill "
+                alt="parent_logo_image"
+              />
+            ) : (
+              <Image
+                src={"/parent_logo.png"}
+                width={180}
+                height={180}
+                className="object-fill "
+                alt="parent_logo_image"
+              />
+            )}
           </Link>
         </div>
 
@@ -72,26 +85,33 @@ export default function header() {
 
           <Separator orientation="vertical" />
           <div className="h-[80px] flex justify-center items-center">
-            <SignOutButton>
-              <button
-                onClick={() => {
-                  setLoading(true);
-                }}
-                className="w-[100%] rounded-3xl flex flex-row justify-center items-center bg-none h-[40px] cursor-pointer text-white dark:text-white hover:bg-none"
-              >
-                {loading == true ? (
-                  <Ring size={15} speed={1.5} bgOpacity={0.25} color="white" />
-                ) : (
-                  <div className="flex flex-row items-center justify-center text-black dark:text-white gap-[20px]">
-                    <IconDoorExit
-                      size={30}
-                      color={`${currentTheme == "dark" ? "white" : "black"}`}
-                    />{" "}
-                    Logout
-                  </div>
-                )}
-              </button>
-            </SignOutButton>
+            {session?.user && (
+              <SignOutButton>
+                <button
+                  onClick={() => {
+                    setLoading(true);
+                  }}
+                  className="w-[100%] rounded-3xl flex flex-row justify-center items-center bg-none h-[40px] cursor-pointer text-white dark:text-white hover:bg-none"
+                >
+                  {loading == true ? (
+                    <Ring
+                      size={15}
+                      speed={1.5}
+                      bgOpacity={0.25}
+                      color="white"
+                    />
+                  ) : (
+                    <div className="flex flex-row items-center justify-center text-black dark:text-white gap-[20px]">
+                      <IconDoorExit
+                        size={30}
+                        color={`${currentTheme == "dark" ? "white" : "black"}`}
+                      />{" "}
+                      Logout
+                    </div>
+                  )}
+                </button>
+              </SignOutButton>
+            )}
           </div>
         </div>
 

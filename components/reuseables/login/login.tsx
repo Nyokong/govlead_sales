@@ -4,12 +4,16 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import React, { useActionState } from "react";
+import React, { useActionState, useContext } from "react";
 import { loginAction } from "./loginaction";
 import Wloader from "../w-loader";
+import { Separator } from "@/components/ui/separator";
+import { ThemeContext } from "@/context/themeContext";
 
 export function SignIn() {
   const [state, formAction, isPending] = useActionState(loginAction, null);
+
+  const { currentTheme } = useContext(ThemeContext);
 
   if (state && "success" in state && state.success) {
     window.location.href = "/dashboard";
@@ -17,15 +21,25 @@ export function SignIn() {
 
   return (
     <div>
-      <div className="flex flex-col justify-center items-center rounded-4xl py-[40px] h-auto sm:w-[400px] w-[320px]  bg-[#ffffff] shadow-sm inset-shadow-sm inset-shadow-black-900">
-        <div className="flex justify-center items-center h-[80px] w-auto bg-[#fff] dark:bg-[#5c5c5c] object-cover">
-          <Image
-            src={"/parent_logo.png"}
-            width={180}
-            height={180}
-            className="object-fill "
-            alt="parent_logo_image"
-          />
+      <div className="flex flex-col justify-center items-center rounded-4xl py-[40px] h-auto sm:w-[400px] w-[320px]  bg-[#fff] dark:bg-[#333333] shadow-sm inset-shadow-sm inset-shadow-black-900">
+        <div className="flex justify-center items-center h-[80px] w-auto  object-cover">
+          {currentTheme == "dark" ? (
+            <Image
+              src={"/parent_logoWTrans.png"}
+              width={180}
+              height={180}
+              className="object-fill "
+              alt="parent_logo_image"
+            />
+          ) : (
+            <Image
+              src={"/parent_logo.png"}
+              width={180}
+              height={180}
+              className="object-fill "
+              alt="parent_logo_image"
+            />
+          )}
         </div>
         <form action={formAction} className="flex flex-col gap-2 ">
           <Label className="flex flex-row gap-2 justify-center h-[30px] m-2 text-black dark:text-[#ffffff]">
@@ -35,7 +49,7 @@ export function SignIn() {
             name="email"
             type="email"
             placeholder="enter your email"
-            className="w-[250px] h-[40px] bg-blue-50 rounded-3xl inset-shadow-sm inset-shadow-black-900"
+            className="w-[250px] h-[40px] bg-blue-50 rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#000000]"
           />
 
           <Label className="flex flex-row gap-2 justify-center h-[30px] m-2 text-black dark:text-[#ffffff]">
@@ -45,8 +59,10 @@ export function SignIn() {
             name="password"
             type="password"
             placeholder="enter your password"
-            className="w-[250px] h-[40px] bg-blue-50 rounded-3xl inset-shadow-sm inset-shadow-black-900"
+            className="w-[250px] h-[40px] bg-blue-50 rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#000000]"
           />
+
+          <Separator color="blue" className="my-[20px]" />
 
           <div className="flex justify-center mt-2">
             <Button

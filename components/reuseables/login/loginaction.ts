@@ -1,5 +1,5 @@
-// app/actions/login.ts
 "use server";
+// app/actions/login.ts
 
 import { signIn } from "@/auth"; // from next-auth
 
@@ -27,7 +27,7 @@ export async function loginAction(
       redirect: false,
       email,
       password,
-      callbackUrl: "/dashboard",
+      // callbackUrl: "/dashboard",
     });
 
     if (res?.error) {

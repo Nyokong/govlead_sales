@@ -36,15 +36,18 @@ export default function Dashboard() {
       <div className="">
         <Header />
         <div
-          className={`font-sans flex flex-col py-[30px] md:flex-row items-center justify-center min-h-[20vh] pb-20 gap-2 sm:p-20 px-10 `}
+          className={`font-sans grid grid-cols-1 md:grid-cols-2 py-[30px] items-center justify-center min-h-[20vh] pb-20 gap-2 sm:p-20 px-10 `}
         >
           <motion.div
             exit={{ opacity: 0 }}
             initial={{ opacity: 0.2 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl w-[340px] md:w-[400px] md:min-h-[400px]"
+            className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl w-full md:min-h-[400px]"
           >
+            <div className="p-3.5 flex flex-row justify-start items-center gap-[10px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[20px] sm:px-[40px]">
+              <Label className="text-3xl ">Profile</Label>
+            </div>
             <div className="p-3.5 flex flex-row justify-center items-center gap-[10px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[20px] sm:px-[40px]">
               <Label className="text-[#ffffff] py-2 px-4 bg-[#2929298f] rounded-2xl">
                 <IconMailFilled />
@@ -66,9 +69,10 @@ export default function Dashboard() {
             transition={{ duration: 0.2 }}
             className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl md:w-[400px] w-[340px] md:min-h-[400px]"
           >
-            <div className="p-3.5 flex flex-row gap-[20px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[40px]">
-              <Label>Menu</Label>
+            <div className="p-3.5 flex flex-row justify-start items-center gap-[10px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[20px] sm:px-[40px]">
+              <Label className="text-3xl ">Menu</Label>
             </div>
+
             <Separator />
             <div className="p-3.5 flex flex-col gap-[30px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[40px]">
               <Label>Generate Invoice</Label>
@@ -76,7 +80,7 @@ export default function Dashboard() {
               <Label>Check Previous Invoices</Label>
 
               <Separator />
-              <Label className="justify-self-end">Contacts</Label>
+              <Label className="justify-self-end mb-[20px]">Contacts</Label>
             </div>
           </motion.div>
         </div>
