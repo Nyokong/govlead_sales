@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
-import { accounts, users } from "@/db/schema";
+import { accounts } from "@/db/schema";
 
 export async function logoutAction(id: string) {
   await db
