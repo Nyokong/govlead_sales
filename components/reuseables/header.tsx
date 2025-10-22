@@ -1,13 +1,17 @@
 "use client";
 
+import {
+  IconBrightnessUpFilled,
+  IconCircleDashedLetterK,
+  IconDoorExit,
+  IconMenu2,
+  IconMoonFilled,
+} from "@tabler/icons-react";
+
 import React, { useContext, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
-import { MdOutlineLightMode } from "react-icons/md";
-import { MdDarkMode } from "react-icons/md";
-import { IoMdExit } from "react-icons/io";
 import { useMenu } from "@/context/side-menu";
 import { motion } from "motion/react";
 import { Label } from "../ui/label";
@@ -48,7 +52,7 @@ export default function header() {
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
               {theme === "dark" ? (
-                <MdDarkMode
+                <IconMoonFilled
                   size={30}
                   onClick={() => {
                     toggleTheme("light");
@@ -56,7 +60,7 @@ export default function header() {
                   color="white"
                 />
               ) : (
-                <MdOutlineLightMode
+                <IconBrightnessUpFilled
                   size={30}
                   onClick={() => {
                     toggleTheme("dark");
@@ -80,7 +84,7 @@ export default function header() {
                   <Ring size={15} speed={1.5} bgOpacity={0.25} color="white" />
                 ) : (
                   <div className="flex flex-row items-center justify-center text-black dark:text-white gap-[20px]">
-                    <IoMdExit
+                    <IconDoorExit
                       size={30}
                       color={`${currentTheme == "dark" ? "white" : "black"}`}
                     />{" "}
@@ -95,7 +99,7 @@ export default function header() {
         {/* Small navigation screens */}
         <div className="flex md:hidden h-[60px] w-[80px] mx-[15px] justify-center items-center">
           {currentTheme == "dark" ? (
-            <GiHamburgerMenu
+            <IconMenu2
               size={"25px"}
               color="#fff"
               onClick={() => {
@@ -104,7 +108,7 @@ export default function header() {
               }}
             />
           ) : (
-            <GiHamburgerMenu
+            <IconMenu2
               size={"30px"}
               color="#000000"
               onClick={() => {
@@ -154,7 +158,7 @@ export default function header() {
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                 >
                   {theme === "dark" ? (
-                    <MdDarkMode
+                    <IconMoonFilled
                       size={30}
                       onClick={() => {
                         toggleTheme("light");
@@ -162,7 +166,7 @@ export default function header() {
                       color="white"
                     />
                   ) : (
-                    <MdOutlineLightMode
+                    <IconBrightnessUpFilled
                       size={30}
                       onClick={() => {
                         toggleTheme("dark");
