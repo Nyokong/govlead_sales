@@ -2,7 +2,6 @@
 
 import {
   IconBrightnessUpFilled,
-  IconCircleDashedLetterK,
   IconDoorExit,
   IconMenu2,
   IconMoonFilled,

@@ -1,23 +1,21 @@
 "use client";
 
-import SignOutButton from "@/components/reuseables/logout/logout";
-import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
-import React, { useContext, useState } from "react";
+import React from "react";
 import Loading from "../loading";
-import { Ring } from "ldrs/react";
 import { Label } from "@/components/ui/label";
 import { redirect } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 // import { ThemeContext } from "@/context/themeContext";
 import Header from "@/components/reuseables/header";
 import { motion } from "motion/react";
+import { IconMailFilled } from "@tabler/icons-react";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
   // const { currentTheme } = useContext(ThemeContext);
 
-  const [generate, setGenerate] = useState(false);
+  // const [generate, setGenerate] = useState(false);
 
   if (status == "loading") {
     return (
@@ -49,6 +47,7 @@ export default function Dashboard() {
           >
             <div className="p-3.5 flex flex-row justify-center items-center gap-[10px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[20px] sm:px-[40px]">
               <Label className="text-[#ffffff] py-2 px-4 bg-[#2929298f] rounded-2xl">
+                <IconMailFilled />
                 Email
               </Label>{" "}
               <p className=" text-black dark:text-white">
