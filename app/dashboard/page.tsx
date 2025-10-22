@@ -36,14 +36,14 @@ export default function Dashboard() {
       <div className="">
         <Header />
         <div
-          className={`font-sans grid grid-cols-1 md:grid-cols-2 py-[30px] items-center justify-center min-h-[20vh] pb-20 gap-2 sm:p-20 px-10 `}
+          className={`font-sans grid grid-cols-1 md:grid-cols-2 place-items-center py-[30px] items-center justify-center min-h-[20vh] pb-20 gap-2 sm:p-20 px-10 `}
         >
           <motion.div
             exit={{ opacity: 0 }}
             initial={{ opacity: 0.2 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl w-full md:min-h-[400px]"
+            className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c]  w-[340px] p-2 rounded-2xl md:min-h-[400px]"
           >
             <div className="p-3.5 flex flex-row justify-start items-center gap-[10px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[20px] sm:px-[40px]">
               <Label className="text-3xl ">Profile</Label>
@@ -67,7 +67,7 @@ export default function Dashboard() {
             initial={{ opacity: 0.2 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl md:w-[400px] w-[340px] md:min-h-[400px]"
+            className="flex flex-col gap-2 bg-[#ffffff] dark:bg-[#5c5c5c] p-2 rounded-2xl lg:w-[400px] w-[340px] md:min-h-[400px]"
           >
             <div className="p-3.5 flex flex-row justify-start items-center gap-[10px] bg-white dark:bg-[#505050] rounded-2xl shadow-sm inset-shadow-xs px-[20px] sm:px-[40px]">
               <Label className="text-3xl ">Menu</Label>
