@@ -6,6 +6,7 @@ import React from "react";
 import { MenuProvider } from "@/context/side-menu";
 import { ThemeProvider } from "next-themes";
 import CustomThemeProvider from "@/context/themeContext";
+import { FormInvoiceContextProvider } from "@/context/createinvoice-form";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +40,11 @@ export default function RootLayout({
         >
           <SessionProvider>
             <CustomThemeProvider>
-              <MenuProvider>{children}</MenuProvider>
+              <MenuProvider>
+                <FormInvoiceContextProvider>
+                  {children}
+                </FormInvoiceContextProvider>
+              </MenuProvider>
             </CustomThemeProvider>
           </SessionProvider>
         </ThemeProvider>

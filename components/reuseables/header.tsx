@@ -32,11 +32,11 @@ export default function header() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className=" w-full md:px-[5%] lg:px-[10%] ">
+    <div className=" w-full md:px-[5%] lg:px-[10%] bg-[#ffffff] dark:bg-[#5c5c5c]">
       <div className="flex flex-row w-full items-center justify-between ">
         {/** Logo image */}
         <div className="flex justify-center items-center h-[80px] w-auto  object-cover">
-          <Link href={"/"}>
+          <Link href={session?.user ? "/dashboard" : "/"}>
             {currentTheme == "dark" ? (
               <Image
                 src={"/parent_logoWTrans.png"}
@@ -70,6 +70,7 @@ export default function header() {
                     toggleTheme("light");
                   }}
                   color="white"
+                  className="cursor-pointer"
                 />
               ) : (
                 <IconBrightnessUpFilled
@@ -78,6 +79,7 @@ export default function header() {
                     toggleTheme("dark");
                   }}
                   color="black"
+                  className="cursor-pointer"
                 />
               )}
             </button>

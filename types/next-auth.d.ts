@@ -71,6 +71,19 @@ declare module "next-auth" {
   // }
 }
 
+type ServiceInvoice = {
+  name: string;
+  price: number;
+  frequency: string;
+};
+
+type FlatInvoiceType = {
+  companyName: string;
+  companyEmail: string;
+  companyContact: number;
+  service: ServiceInvoice[];
+};
+
 declare module "@auth/core/jwt" {
   interface JWT {
     id: string;
