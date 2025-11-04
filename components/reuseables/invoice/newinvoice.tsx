@@ -14,9 +14,9 @@ type Props = {
 export default function Newinvoice({ flatlist }: Props) {
   const { currentTheme } = useContext(ThemeContext);
 
-  //   useEffect(() => {
-  //     console.log(flatlist);
-  //   }, []);
+  useEffect(() => {
+    console.log(flatlist);
+  }, []);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-ZA", {

@@ -97,14 +97,14 @@ export default function Invoice() {
     }
   };
 
-  const getColorVariant = (index: number) => {
-    if (index % 2 == 0) {
-      // this is an odd number
-      return "bg-[#5758D9] dark:bg-[#CCCCFF] dark:text-[#000] text-white";
-    } else {
-      return "bg-[#7A7AFF] dark:bg-[#E0E0FF] dark:text-[#000] text-white";
-    }
-  };
+  // const getColorVariant = (index: number) => {
+  //   if (index % 2 == 0) {
+  //     // this is an odd number
+  //     return "bg-[#5758D9] dark:bg-[#CCCCFF] dark:text-[#000] text-white";
+  //   } else {
+  //     return "bg-[#7A7AFF] dark:bg-[#E0E0FF] dark:text-[#000] text-white";
+  //   }
+  // };
 
   return (
     <div className="relative">

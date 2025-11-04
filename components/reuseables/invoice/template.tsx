@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { Page } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { IconCornerDownRight } from "@tabler/icons-react";

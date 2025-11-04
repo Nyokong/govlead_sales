@@ -1,19 +1,14 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import React, { useContext, useState } from "react";
+import React from "react";
 import Loading from "../loading";
-import { Label } from "@/components/ui/label";
 import { redirect } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 // import { ThemeContext } from "@/context/themeContext";
 import Header from "@/components/reuseables/header";
 import { motion } from "motion/react";
-import {
-  IconCircleCheck,
-  IconCircleCheckFilled,
-  IconMailFilled,
-} from "@tabler/icons-react";
+import { IconCircleCheck, IconCircleCheckFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useFormInvoice } from "@/context/createinvoice-form";

@@ -1,11 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { motion } from "motion/react";
-import Image from "next/image";
 
 import { Input } from "@/components/ui/input";
 
-import { ThemeContext } from "@/context/themeContext";
-import Template from "../invoice/template";
 import { Separator } from "@/components/ui/separator";
 
 export default function Clientdetails() {
