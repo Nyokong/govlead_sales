@@ -18,6 +18,13 @@ export default function Newinvoice({ flatlist }: Props) {
     console.log(flatlist);
   }, []);
 
+  const fulldatestring = new Date();
+
+  const todaydate = ` ${fulldatestring.getDay()} ${fulldatestring.toLocaleString(
+    "en-ZA",
+    { month: "long" }
+  )} ${fulldatestring.getFullYear()}`;
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-ZA", {
       style: "currency",
@@ -66,14 +73,17 @@ export default function Newinvoice({ flatlist }: Props) {
             <div className="my-2 py-[10px] px-[10px] flex justify-between items-center w-full">
               <div>
                 <p>BILL TO</p>
-                <div>
-                  <p>Name of Company</p>
-                  <p>+27 071 299 9529</p>
-                </div>
+                {flatlist.map((entry, idx) => (
+                  <div key={idx}>
+                    <p>{entry.companyName}</p>
+                    <p>{entry.companyEmail}</p>
+                    <p>{entry.companyContact}</p>
+                  </div>
+                ))}
               </div>
               <div>
                 <p>INVOICE Date</p>
-                <p>1 November 2025</p>
+                <p>{todaydate}</p>
               </div>
             </div>
           </div>
