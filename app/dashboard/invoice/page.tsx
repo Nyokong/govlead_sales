@@ -258,7 +258,7 @@ export default function Invoice() {
         </div>
       </div> */}
 
-      {isCreateInvoice ? (
+      {isCreateInvoice && (
         <motion.div
           exit={{ opacity: 0 }}
           initial={{ opacity: 0.2 }}
@@ -281,7 +281,9 @@ export default function Invoice() {
 
           {flat.length > 0 && <Newinvoice flatlist={flat} />}
         </motion.div>
-      ) : (
+      )}
+
+      {/* : (
         <motion.div
           exit={{ opacity: 0 }}
           initial={{ opacity: 0.2 }}
@@ -303,7 +305,7 @@ export default function Invoice() {
           </div>
           <Template />
         </motion.div>
-      )}
+      ) */}
     </div>
   );
 }

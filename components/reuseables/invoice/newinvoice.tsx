@@ -29,7 +29,7 @@ export default function Newinvoice({ flatlist }: Props) {
     <div>
       <div className="flex justify-center items-center py-[20px]">
         <div
-          className={`relative w-[360px] md:h-[877px] md:w-[640px] bg-[#E4E4E4] dark:bg-[#5c5c5c] p-[30px]`}
+          className={`relative w-[360px] md:h-[877px] md:w-[640px] bg-[#cbc7f5] dark:bg-[#362dad] p-[30px] shadow-2xl`}
         >
           <div className="flex flex-row justify-between ">
             <div className="h-16 w-16 md:w-[150px] md:h-[80px] overflow-hidden flex justify-center items-center">
