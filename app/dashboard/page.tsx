@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React from "react";
 import Loading from "../loading";
 import { redirect } from "next/navigation";
 // import { ThemeContext } from "@/context/themeContext";
