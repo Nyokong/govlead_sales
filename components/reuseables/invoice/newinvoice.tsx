@@ -156,7 +156,7 @@ export default function Newinvoice({ flatlist }: Props) {
                 document={<Pdfdownload flatlist={flatlist} />}
                 fileName="somename.pdf"
               >
-                {({ blob, url, loading, error }) =>
+                {({ loading }) =>
                   loading ? "Loading document..." : "Download now!"
                 }
               </PDFDownloadLink>

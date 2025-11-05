@@ -1,8 +1,6 @@
 // app/api/pdf/route.ts
 import puppeteer from "puppeteer";
 import { NextResponse } from "next/server";
-import { renderToBuffer } from "@react-pdf/renderer";
-import Pdfdownload from "@/components/reuseables/pdf/invoicedoc";
 
 export async function POST(req: Request) {
   try {

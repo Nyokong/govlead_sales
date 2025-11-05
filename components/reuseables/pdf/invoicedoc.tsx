@@ -1,4 +1,5 @@
 import { FlatInvoiceType } from "@/types/next-auth";
+import React from "react";
 import {
   Page,
   Text,
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   line: {
-    height: "0.2px",
+    height: "1px",
     width: "100%",
     backgroundColor: "#fff",
   },
