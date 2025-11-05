@@ -3,9 +3,10 @@ import { Separator } from "@/components/ui/separator";
 import { ThemeContext } from "@/context/themeContext";
 import { FlatInvoiceType } from "@/types/next-auth";
 import { IconCornerDownRight } from "@tabler/icons-react";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import Pdfdownload from "../pdf/invoicedoc";
 
 type Props = {
   flatlist: FlatInvoiceType[];
@@ -14,9 +15,11 @@ type Props = {
 export default function Newinvoice({ flatlist }: Props) {
   const { currentTheme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    console.log(flatlist);
-  }, []);
+  const pdfref = useRef(null);
+
+  //   useEffect(() => {
+  //     console.log(flatlist);
+  //   }, []);
 
   const fulldatestring = new Date();
 
@@ -34,9 +37,9 @@ export default function Newinvoice({ flatlist }: Props) {
 
   return (
     <div>
-      <div className="flex justify-center items-center py-[20px]">
+      <div ref={pdfref} className="flex justify-center items-center py-[20px]">
         <div
-          className={`relative w-[360px] md:h-[877px] md:w-[640px] bg-[#cbc7f5] dark:bg-[#362dad] p-[30px] shadow-2xl`}
+          className={`relative w-[360px] md:h-[877px] md:w-[640px] bg-[#cbc7f5] dark:bg-[#4036cc] p-[30px] shadow-2xl`}
         >
           <div className="flex flex-row justify-between ">
             <div className="h-16 w-16 md:w-[150px] md:h-[80px] overflow-hidden flex justify-center items-center">
@@ -148,11 +151,26 @@ export default function Newinvoice({ flatlist }: Props) {
             ))}
           </div>
           <div className=" flex justify-center items-center absolute bottom-[40px]  left-[200px]">
-            <Button className="px-[70px] py-[20px] bg-[#c23030] md:block hidden">
+            <Button className="cursor-pointer px-[70px] py-[20px] dark:text-white text-white hover:text-red-600 bg-[#242424] md:flex justify-center items-center hidden">
+              <PDFDownloadLink
+                document={<Pdfdownload flatlist={flatlist} />}
+                fileName="somename.pdf"
+              >
+                {({ blob, url, loading, error }) =>
+                  loading ? "Loading document..." : "Download now!"
+                }
+              </PDFDownloadLink>
+            </Button>
+            {/* <Button
+              className="cursor-pointer px-[70px] py-[20px] bg-[#c23030] md:flex justify-center items-center hidden"
+              onClick={() => {
+                // handlepdfDownload();
+              }}
+            >
               <Link href={"/dashboard/invoice/pdf"} className="text-white">
                 Download PDF
               </Link>
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

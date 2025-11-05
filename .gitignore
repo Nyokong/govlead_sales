@@ -19,6 +19,7 @@
 
 # production
 /build
+/app/dashboard/invoice/pdf
 # ./migrations
 
 # misc

@@ -21,7 +21,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FlatInvoiceType } from "@/types/next-auth";
 import Newinvoice from "@/components/reuseables/invoice/newinvoice";
-// import Template from "@/components/reuseables/invoice/template";
 
 const services = [
   { id: 0, name: "App Development", price: 100000, frequency: "once-off" },
@@ -264,48 +263,27 @@ export default function Invoice() {
           initial={{ opacity: 0.2 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
+          className="absolute z-30 top-0  w-[100vw] h-[100%]"
         >
-          <div className="flex justify-center items-center ">
-            <div className="w-full flex justify-center items-center mb-[40px] h-auto px-[20px] md:max-w-[85vw] lg:max-w-[80vw]">
-              <button
-                onClick={() => {
-                  setIsCreateInvoice(false);
-                  setFlat([]);
-                }}
-                className="cursor-pointer w-[300px] h-[60px] bg-red-500 text-white rounded-2xl shadow-sm inset-shadow-sm"
-              >
-                Clear Invoice
-              </button>
+          <div className=" bg-[#f3f3f3b7]">
+            <div className="flex justify-center items-center ">
+              <div className="w-full flex justify-center items-center mb-[40px] h-auto px-[20px] md:max-w-[85vw] lg:max-w-[80vw]">
+                <button
+                  onClick={() => {
+                    setIsCreateInvoice(false);
+                    setFlat([]);
+                  }}
+                  className="mt-[40px] cursor-pointer w-[300px] h-[60px] bg-red-500 text-white rounded-2xl shadow-sm inset-shadow-sm"
+                >
+                  Clear Invoice
+                </button>
+              </div>
             </div>
-          </div>
 
-          {flat.length > 0 && <Newinvoice flatlist={flat} />}
+            {flat.length > 0 && <Newinvoice flatlist={flat} />}
+          </div>
         </motion.div>
       )}
-
-      {/* : (
-        <motion.div
-          exit={{ opacity: 0 }}
-          initial={{ opacity: 0.2 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="flex justify-center items-center ">
-            <div className="w-full flex justify-center items-center mb-[40px] h-auto px-[20px] md:max-w-[85vw] lg:max-w-[80vw]">
-              <button
-                onClick={() => {
-                  setIsCreateInvoice(false);
-                  setFlat([]);
-                }}
-                className="cursor-pointer w-[300px] h-[60px] bg-red-500 text-white rounded-2xl shadow-sm inset-shadow-sm"
-              >
-                Clear Invoice
-              </button>
-            </div>
-          </div>
-          <Template />
-        </motion.div>
-      ) */}
     </div>
   );
 }
