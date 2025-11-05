@@ -201,7 +201,7 @@ export default function Pdfdownload({ flatlist }: Props) {
               ))}
             </View>
             <View style={{ paddingRight: 20 }}>
-              <Text style={styles.label}>INVOICE Date</Text>
+              <Text style={styles.label}>INVOICE DATE</Text>
               <Text>{todaydate}</Text>
             </View>
           </View>
@@ -212,7 +212,7 @@ export default function Pdfdownload({ flatlist }: Props) {
               <View style={styles.line}></View>
             </View>
             <View style={styles.row}>
-              <Text style={styles.description}>Service Description</Text>
+              <Text style={styles.description}>SERVICE DESCRIPTION</Text>
               <View style={styles.priceTotalContainer}>
                 <Text style={styles.priceLabel}>PRICE</Text>
                 <Text style={styles.totalLabel}>TOTAL</Text>

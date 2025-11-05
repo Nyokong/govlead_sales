@@ -46,12 +46,6 @@ export default function Dashboard() {
   //   }
   // };
 
-  useEffect(() => {
-    if (uxloading) {
-      toggleLoading(false);
-    }
-  }, []);
-
   if (status == "loading") {
     return (
       <div className="font-sans flex items-center justify-center w-[100dvw] min-h-[70vh] p-8 pb-20 gap-16 sm:p-20">

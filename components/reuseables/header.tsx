@@ -20,11 +20,13 @@ import { useTheme } from "next-themes";
 import SignOutButton from "./logout/logout";
 import { Ring } from "ldrs/react";
 import { useSession } from "next-auth/react";
+import { useUxContext } from "@/context/userux";
 
 export default function header() {
   const { isOpen, setIsOpen } = useMenu();
 
   const { data: session } = useSession();
+  const { uxloading, toggleLoading } = useUxContext();
 
   const { currentTheme, toggleTheme } = useContext(ThemeContext);
   const { theme, setTheme } = useTheme();
@@ -36,23 +38,38 @@ export default function header() {
       <div className="flex flex-row w-full items-center justify-between ">
         {/** Logo image */}
         <div className="flex justify-center items-center h-[80px] w-auto  object-cover">
-          <Link href={session?.user ? "/dashboard" : "/"}>
+          <Link
+            href={session?.user ? "/dashboard" : "/"}
+            onClick={() => {
+              if (uxloading) {
+                toggleLoading(false);
+              }
+            }}
+          >
             {currentTheme == "dark" ? (
-              <Image
-                src={"/parent_logoWTrans.png"}
-                width={180}
-                height={180}
-                className="object-fill "
-                alt="parent_logo_image"
-              />
+              <div className="flex flex-row gap-2 items-center">
+                <Image
+                  src={"/parent_logoWTrans.png"}
+                  width={180}
+                  height={180}
+                  className="object-fill "
+                  alt="parent_logo_image"
+                />
+
+                {uxloading && <p>loading...</p>}
+              </div>
             ) : (
-              <Image
-                src={"/parent_logo.png"}
-                width={180}
-                height={180}
-                className="object-fill "
-                alt="parent_logo_image"
-              />
+              <div className="flex flex-row gap-2 items-center">
+                <Image
+                  src={"/parent_logo.png"}
+                  width={180}
+                  height={180}
+                  className="object-fill "
+                  alt="parent_logo_image"
+                />
+
+                {uxloading && <p>loading...</p>}
+              </div>
             )}
           </Link>
         </div>

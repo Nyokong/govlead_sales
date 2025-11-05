@@ -85,7 +85,7 @@ export default function Newinvoice({ flatlist }: Props) {
                 ))}
               </div>
               <div>
-                <p>INVOICE Date</p>
+                <p>INVOICE DATE</p>
                 <p>{todaydate}</p>
               </div>
             </div>
@@ -96,7 +96,7 @@ export default function Newinvoice({ flatlist }: Props) {
               <Separator />
             </div>
             <div className="px-[10px] w-full flex flex-row justify-between">
-              <p className="w-[60%]">Service Description</p>
+              <p className="w-[60%]">SERVICE DESCRIPTION</p>
               <div className="w-[40%] flex flex-row justify-between">
                 <p className="w-[50%] justify-start ">PRICE</p>
                 <p className="w-[50%] flex justify-start">TOTAL</p>

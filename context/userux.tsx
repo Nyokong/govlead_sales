@@ -53,6 +53,10 @@ const UxContextProvider = ({ children }: { children: ReactNode }) => {
       }
     } else {
       setLoading(true);
+      localStorage.setItem(
+        "uxSettings",
+        JSON.stringify({ uxloading: isLoading })
+      );
     }
   };
 
