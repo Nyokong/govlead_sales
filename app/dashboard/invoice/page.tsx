@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FlatInvoiceType } from "@/types/next-auth";
 import Newinvoice from "@/components/reuseables/invoice/newinvoice";
+import { useUxContext } from "@/context/userux";
 
 const services = [
   { id: 0, name: "App Development", price: 100000, frequency: "once-off" },
@@ -42,6 +43,7 @@ export default function Invoice() {
   // const flat: FlatInvoiceType[] = [];
 
   const { isSelected, setIsSelected } = useFormInvoice();
+  const { uxloading, toggleLoading } = useUxContext();
 
   const [flat, setFlat] = useState<FlatInvoiceType[]>([]);
 
@@ -59,6 +61,13 @@ export default function Invoice() {
       setIsCreateInvoice(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (uxloading) {
+      toggleLoading(false);
+      console.log(uxloading);
+    }
+  }, [uxloading]);
 
   const SumbitCompanyDetails = () => {
     if (

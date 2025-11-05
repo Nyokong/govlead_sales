@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   line: {
-    height: "1px",
+    height: "0.5px",
     width: "100%",
     backgroundColor: "#fff",
   },
@@ -178,9 +178,9 @@ export default function Pdfdownload({ flatlist }: Props) {
             />
           </View>
           <View style={styles.contactContainer}>
-            <Text style={styles.contactText}>+27 71</Text>
-            <Text style={styles.contactText}>info@email</Text>
-            <Text style={styles.contactText}>www.32232.co.za</Text>
+            <Text style={styles.contactText}>+27 71 219 8630</Text>
+            <Text style={styles.contactText}>info@govlead.co.za</Text>
+            <Text style={styles.contactText}>www.govlead.co.za</Text>
           </View>
         </View>
         <View style={styles.lineContainer}>

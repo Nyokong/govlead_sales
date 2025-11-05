@@ -7,6 +7,7 @@ import { MenuProvider } from "@/context/side-menu";
 import { ThemeProvider } from "next-themes";
 import CustomThemeProvider from "@/context/themeContext";
 import { FormInvoiceContextProvider } from "@/context/createinvoice-form";
+import UxContextProvider from "@/context/userux";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,13 +40,15 @@ export default function RootLayout({
           defaultTheme="system"
         >
           <SessionProvider>
-            <CustomThemeProvider>
-              <MenuProvider>
-                <FormInvoiceContextProvider>
-                  {children}
-                </FormInvoiceContextProvider>
-              </MenuProvider>
-            </CustomThemeProvider>
+            <UxContextProvider>
+              <CustomThemeProvider>
+                <MenuProvider>
+                  <FormInvoiceContextProvider>
+                    {children}
+                  </FormInvoiceContextProvider>
+                </MenuProvider>
+              </CustomThemeProvider>
+            </UxContextProvider>
           </SessionProvider>
         </ThemeProvider>
       </body>

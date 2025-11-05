@@ -154,7 +154,7 @@ export default function Newinvoice({ flatlist }: Props) {
             <Button className="cursor-pointer px-[70px] py-[20px] dark:text-white text-white hover:text-red-600 bg-[#242424] md:flex justify-center items-center hidden">
               <PDFDownloadLink
                 document={<Pdfdownload flatlist={flatlist} />}
-                fileName="somename.pdf"
+                fileName="govlead_invoice.pdf"
               >
                 {({ loading }) =>
                   loading ? "Loading document..." : "Download now!"

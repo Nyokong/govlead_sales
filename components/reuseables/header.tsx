@@ -145,10 +145,10 @@ export default function header() {
       <div className=" ">
         {isOpen && (
           <motion.div
-            exit={{ opacity: 0, scaleX: 0 }}
-            initial={{ opacity: 0.2, scaleX: 0 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.2 }}
+            exit={{ x: "100%", opacity: 0 }}
+            initial={{ x: "100%", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className="absolute z-20 top-0 right-0 w-[300px] h-screen bg-[#f7f7f7] dark:bg-[#242424] shadow-md "
           >
             <div>
