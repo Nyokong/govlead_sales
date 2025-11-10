@@ -5,7 +5,11 @@ module.exports = {
   purge: [],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        "full-minus-8": "calc(100% - 60px)",
+      },
+    },
     screens: {
       ...defaultTheme.screens,
       sm: "375px",

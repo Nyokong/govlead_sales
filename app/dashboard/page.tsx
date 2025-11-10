@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 import Loading from "../loading";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 // import { ThemeContext } from "@/context/themeContext";
 import Header from "@/components/reuseables/header";
 import { motion } from "motion/react";
@@ -34,6 +34,8 @@ export default function Dashboard() {
 
   // const { setIsSelected, isSelected } = useFormInvoice();
   const { uxloading, toggleLoading } = useUxContext();
+
+  // usePageTimer();
 
   // const [generate, setGenerate] = useState(false);
 
@@ -66,7 +68,7 @@ export default function Dashboard() {
         <Header />
         <div className="flex flex-col md:flex-row justify-center items-start gap-2 px-[20px]">
           <div
-            className={`font-sans w-full md:w-[80vw] grid grid-cols-1 md:grid-cols-4 place-items-center  items-center justify-center min-h-[20vh] pb-20 gap-2 sm:p-20 px-10 pt-[20px] `}
+            className={`font-sans w-full md:w-[80vw] grid grid-cols-1 md:grid-cols-4 place-items-center  items-center justify-center min-h-[20vh] pb-20 gap-2 sm:p-20 md:px-10 pt-[20px] `}
           >
             <motion.div
               exit={{ opacity: 0 }}
@@ -85,7 +87,7 @@ export default function Dashboard() {
               transition={{ duration: 0.2 }}
               className="col-span-4 bg-[#ffffff] shadow-md rounded-2xl inset-shadow-sm dark:bg-[#5c5c5c] w-full h-auto py-[20px] md:h-[100px] flex flex-col md:flex-row gap-4 justify-center items-center"
             >
-              <Button className="h-[60px] cursor-pointer px-[40px] w-[280px] rounded-4xl">
+              <Button className="h-[60px] cursor-pointer px-[40px] w-[250px] md:w-[280px] rounded-4xl">
                 {uxloading ? (
                   <div className="flex flex-row justify-center items-center gap-3">
                     <Wloader />
@@ -102,7 +104,7 @@ export default function Dashboard() {
                   </Link>
                 )}
               </Button>
-              <Button className="h-[60px] cursor-pointer px-[40px] w-[280px] rounded-4xl">
+              <Button className="h-[60px] cursor-pointer px-[40px] w-[250px] md:w-[280px] rounded-4xl">
                 Check Old Invoices
               </Button>
             </motion.div>

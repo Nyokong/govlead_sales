@@ -34,7 +34,7 @@ export default function header() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className=" w-full md:px-[5%] lg:px-[10%] bg-[#ffffff] dark:bg-[#5c5c5c]">
+    <div className=" w-full md:px-[5%] lg:px-[10%] bg-[#ffffff] dark:bg-[#5c5c5c] shadow-sm">
       <div className="flex flex-row w-full items-center justify-between ">
         {/** Logo image */}
         <div className="flex justify-center items-center h-[80px] w-auto  object-cover">
@@ -144,6 +144,7 @@ export default function header() {
                 setIsOpen(true);
                 console.log(isOpen);
               }}
+              className="cursor-pointer"
             />
           ) : (
             <IconMenu2
@@ -153,6 +154,7 @@ export default function header() {
                 setIsOpen(true);
                 console.log(isOpen);
               }}
+              className="cursor-pointer"
             />
           )}
         </div>
@@ -166,12 +168,12 @@ export default function header() {
             initial={{ x: "100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute z-20 top-0 right-0 w-[300px] h-screen bg-[#f7f7f7] dark:bg-[#242424] shadow-md "
+            className="absolute z-30 top-0 right-0 w-[300px] h-screen bg-[#f7f7f7] dark:bg-[#242424] shadow-md "
           >
             <div>
               {currentTheme == "dark" ? (
                 <MdClose
-                  className="m-[20px]"
+                  className="m-[20px] cursor-pointer"
                   onClick={() => {
                     setIsOpen(false);
                   }}
@@ -180,7 +182,7 @@ export default function header() {
                 />
               ) : (
                 <MdClose
-                  className="m-[20px]"
+                  className="m-[20px] cursor-pointer"
                   onClick={() => {
                     setIsOpen(false);
                   }}
@@ -202,6 +204,7 @@ export default function header() {
                         toggleTheme("light");
                       }}
                       color="white"
+                      className="cursor-pointer"
                     />
                   ) : (
                     <IconBrightnessUpFilled
@@ -210,6 +213,7 @@ export default function header() {
                         toggleTheme("dark");
                       }}
                       color="black"
+                      className="cursor-pointer"
                     />
                   )}
                 </button>

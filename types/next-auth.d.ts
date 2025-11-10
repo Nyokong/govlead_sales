@@ -82,6 +82,9 @@ type FlatInvoiceType = {
   companyEmail: string;
   companyContact: number;
   service: ServiceInvoice[];
+  invoiceId: string;
+  total: number;
+  servicefee: number;
 };
 
 declare module "@auth/core/jwt" {

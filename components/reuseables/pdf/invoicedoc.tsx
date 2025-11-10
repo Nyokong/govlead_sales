@@ -7,6 +7,7 @@ import {
   Document,
   StyleSheet,
   Image,
+  Link,
 } from "@react-pdf/renderer";
 
 // Create styles
@@ -69,11 +70,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
+  invoiceIdView: {
+    marginVertical: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+  },
+  totalEndView: {
+    marginVertical: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    width: "100%",
+  },
   label: {
     fontWeight: "bold",
   },
   sectionContainer: {
-    marginTop: 40,
+    marginTop: 10,
     flexDirection: "column",
     gap: 20,
   },
@@ -99,13 +117,20 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   totalLabel: {
-    width: "50%",
-    textAlign: "left",
+    width: "100%",
+    textAlign: "right",
   },
   serviceListContainer: {
     marginTop: 10,
     flexDirection: "column",
     gap: 20,
+  },
+  ThankYouView: {
+    width: "100%",
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    backgroundColor: "#dadada",
+    borderRadius: 20,
   },
   serviceRow: {
     paddingHorizontal: 10,
@@ -187,7 +212,7 @@ export default function Pdfdownload({ flatlist }: Props) {
           <View style={styles.line}></View>
         </View>
 
-        <View>
+        <View style={{ minHeight: 500 }}>
           {/* BILL TO + INVOICE DATE */}
           <View style={styles.headerContainer}>
             <View style={{ paddingLeft: 20 }}>
@@ -206,6 +231,18 @@ export default function Pdfdownload({ flatlist }: Props) {
             </View>
           </View>
 
+          <View style={styles.lineContainer}>
+            <View style={styles.line}></View>
+          </View>
+          <View style={styles.invoiceIdView}>
+            <Text>INVOICE ID:</Text>
+            {flatlist.map((entry, idx) => (
+              <View key={idx}>
+                <Text>{entry.invoiceId}</Text>
+              </View>
+            ))}
+          </View>
+
           {/* HEADER ROW */}
           <View style={styles.sectionContainer}>
             <View style={styles.lineContainer}>
@@ -214,7 +251,7 @@ export default function Pdfdownload({ flatlist }: Props) {
             <View style={styles.row}>
               <Text style={styles.description}>SERVICE DESCRIPTION</Text>
               <View style={styles.priceTotalContainer}>
-                <Text style={styles.priceLabel}>PRICE</Text>
+                {/* <Text style={styles.priceLabel}>PRICE</Text> */}
                 <Text style={styles.totalLabel}>TOTAL</Text>
               </View>
             </View>
@@ -242,11 +279,11 @@ export default function Pdfdownload({ flatlist }: Props) {
                     ))}
                   </View>
 
-                  {flatlist.length < 1 && (
+                  {/* {flatlist.length < 4 && (
                     <View style={styles.lineContainer}>
                       <View style={styles.line}></View>
                     </View>
-                  )}
+                  )} */}
                 </View>
 
                 {/* Uncomment if you want to show price/total */}
@@ -256,11 +293,58 @@ export default function Pdfdownload({ flatlist }: Props) {
             </View> */}
               </View>
             ))}
+
+            <View style={styles.serviceRow}>
+              <View style={{ flexDirection: "row", gap: 20, paddingLeft: 20 }}>
+                <Text>Service Fee:</Text>
+                {flatlist.map((entry, idx) => (
+                  <View key={idx} style={{ paddingRight: 40 }}>
+                    <Text>{formatCurrency(entry.servicefee)}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <View>
+            <View style={styles.totalEndView}>
+              {flatlist.map((entry, idx) => (
+                <View key={idx} style={{ paddingRight: 40 }}>
+                  <Text>{formatCurrency(entry.total)}</Text>
+                </View>
+              ))}
+            </View>
           </View>
         </View>
-        {/* <View style={styles.section}>
-          <Text>Section #2</Text>
-        </View> */}
+
+        <View style={{ width: "100%", paddingHorizontal: 40 }}>
+          <View style={styles.ThankYouView}>
+            <View>
+              <Text style={{ color: "#000000" }}>
+                If you have any questions concerning this invoice,
+              </Text>
+              <Text style={{ color: "#000000" }}>
+                Please contact the following email:
+              </Text>
+              <Link src="info@govlead.co.za">info@govlead.co.za</Link>
+              {/* <Pressable
+              onPress={() => Link.openURL("mailto:info@govelad.co.za")}
+            >
+              <Text style={styles.emailLink}>info@govelad.co.za</Text>
+            </Pressable> */}
+            </View>
+            <View
+              style={{
+                marginTop: 20,
+                color: "#000",
+                fontWeight: 700,
+                fontSize: 30,
+              }}
+            >
+              <Text>Thank You for your Business!</Text>
+            </View>
+          </View>
+        </View>
       </Page>
     </Document>
   );

@@ -15,6 +15,13 @@
       "when": 1761130333266,
       "tag": "0001_nebulous_turbo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762421443617,
+      "tag": "0002_cheerful_slayback",
+      "breakpoints": true
     }
   ]
 }
