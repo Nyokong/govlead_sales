@@ -23,7 +23,6 @@ import { FlatInvoiceType } from "@/types/next-auth";
 import Newinvoice from "@/components/reuseables/invoice/newinvoice";
 import { useUxContext } from "@/context/userux";
 import { Label } from "@/components/ui/label";
-import { Tilt } from "react-tilt";
 import Image from "next/image";
 import { useDelayedTrue } from "@/app/_hooks/delayedStart";
 import Bloader from "@/components/reuseables/b-loader";
@@ -32,18 +31,6 @@ import {
   IconRosetteDiscountCheckFilled,
   IconX,
 } from "@tabler/icons-react";
-
-const defaultOptions = {
-  reverse: false, // reverse the tilt direction
-  max: 20, // max tilt rotation (degrees)
-  perspective: 1000, // Transform perspective, the lower the more extreme the tilt gets.
-  scale: 1.05, // 2 = 200%, 1.5 = 150%, etc..
-  speed: 1000, // Speed of the enter/exit transition
-  transition: true, // Set a transition on enter/exit.
-  axis: null, // What axis should be disabled. Can be X or Y.
-  reset: true, // If the tilt effect has to be reset on exit.
-  easing: "cubic-bezier(.03,.98,.52,.99)", // Easing on enter/exit.
-};
 
 const services = [
   { id: 0, name: "App Development", price: 100000, frequency: "once-off" },
@@ -603,36 +590,26 @@ export default function Invoice() {
               transition={{ duration: 0.6 }}
               className="flex justify-center items-center px-[20px] md:h-[320px] w-[370px] sm:w-[430px] dark:bg-[#1f1f1f] h-auto py-[40px] rounded-3xl"
             >
-              <Tilt
-                options={defaultOptions}
-                style={{ height: 213, width: 337 }}
-              >
-                <div className="relative h-[213px] w-[337px] rounded-2xl text-white bg-[#3a4097] ">
-                  <div className="absolute top-[30%] left-[20px] font-mono text-[16px]">
-                    {creditCardNumberFormat(isCardNumber)}
-                  </div>
-                  <div className="absolute top-[18%] left-[20px] font-mono text-[16px]">
-                    <span className="text-[7px]">Card Holder:</span>{" "}
-                    <span className="text-[10px]">
-                      {cardHolderFormat(isCardHolderName)}
-                    </span>
-                  </div>
-                  <div className="absolute top-[50%] right-[20px]">
-                    <Image
-                      src={"/chip.png"}
-                      width={80}
-                      height={50}
-                      alt="chip"
-                    />
-                  </div>
-                  <div className="absolute bottom-[10%] left-[20px] font-mono text-[16px]">
-                    <span className="text-[7px]">Exp Date:</span>{" "}
-                    <span className="text-[10px]">
-                      {cardExpFormat(isExpDate)}
-                    </span>
-                  </div>
+              <div className="relative h-[213px] w-[337px] rounded-2xl text-white bg-[#3a4097] ">
+                <div className="absolute top-[30%] left-[20px] font-mono text-[16px]">
+                  {creditCardNumberFormat(isCardNumber)}
                 </div>
-              </Tilt>
+                <div className="absolute top-[18%] left-[20px] font-mono text-[16px]">
+                  <span className="text-[7px]">Card Holder:</span>{" "}
+                  <span className="text-[10px]">
+                    {cardHolderFormat(isCardHolderName)}
+                  </span>
+                </div>
+                <div className="absolute top-[50%] right-[20px]">
+                  <Image src={"/chip.png"} width={80} height={50} alt="chip" />
+                </div>
+                <div className="absolute bottom-[10%] left-[20px] font-mono text-[16px]">
+                  <span className="text-[7px]">Exp Date:</span>{" "}
+                  <span className="text-[10px]">
+                    {cardExpFormat(isExpDate)}
+                  </span>
+                </div>
+              </div>
             </motion.div>
             <motion.div
               exit={{ opacity: 0 }}
