@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 import Loading from "../loading";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 // import { ThemeContext } from "@/context/themeContext";
 import Header from "@/components/reuseables/header";
 import { motion } from "motion/react";
