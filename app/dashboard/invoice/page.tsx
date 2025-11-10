@@ -603,7 +603,7 @@ export default function Invoice() {
         >
           <div
             className={`${
-              isRadioSelected == "default" && "bg-[#f0f0f0] "
+              isRadioSelected == "default" && "bg-[#f0f0f0] dark:bg-[#303030] "
             } flex items-center gap-3 flex-col p-[10px] md:p-[20px] w-full pt-[10px]  rounded-2xl shadow-sm inset-shadow-sm`}
           >
             <div className="flex flex-row items-center justify-start gap-3 w-[370px]">
@@ -772,7 +772,8 @@ export default function Invoice() {
           </div>
           <div
             className={`${
-              isRadioSelected == "new_company" && "bg-[#f0f0f0] "
+              isRadioSelected == "new_company" &&
+              "bg-[#f0f0f0] dark:bg-[#303030] "
             } flex items-center gap-3 flex-col p-[10px] md:p-[20px] mt-2 rounded-2xl shadow-sm inset-shadow-sm pt-[10px]`}
           >
             <div className="flex fel-row w-[370px] justify-start items-center gap-3">
