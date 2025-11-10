@@ -6,7 +6,6 @@ import {
   IconDoorExit,
   IconMenu2,
   IconMoonFilled,
-  IconRosetteDiscountCheckFilled,
   IconX,
 } from "@tabler/icons-react";
 
