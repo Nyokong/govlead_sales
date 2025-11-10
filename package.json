@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npm install --legacy-peer-deps && drizzle-kit generate && drizzle-kit push && next build --turbopack && tsx scripts/seedAdmin.ts && tsx scripts/seedStaff.ts",
+    "build": "npm install --legacy-peer-deps react-tilt && drizzle-kit generate && drizzle-kit push && next build --turbopack && tsx scripts/seedAdmin.ts && tsx scripts/seedStaff.ts",
     "migrate": "drizzle-kit generate && drizzle-kit push",
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx",
