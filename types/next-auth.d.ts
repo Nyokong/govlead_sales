@@ -77,6 +77,15 @@ type ServiceInvoice = {
   frequency: string;
 };
 
+type SearchType = {
+  id: number;
+  name: string;
+  email: string;
+  contactNumber: string | null;
+  address: string | null;
+  createdAt: Date | null;
+};
+
 type FlatInvoiceType = {
   companyName: string;
   companyEmail: string;
@@ -85,6 +94,12 @@ type FlatInvoiceType = {
   invoiceId: string;
   total: number;
   servicefee: number;
+};
+
+type SearchCompanyResType = {
+  companyName: string;
+  companyEmail: string;
+  companyContact: number;
 };
 
 declare module "@auth/core/jwt" {

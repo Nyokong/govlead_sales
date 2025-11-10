@@ -18,19 +18,23 @@ import { useFormInvoice } from "@/context/createinvoice-form";
 // import { IconCircleCheck, IconCircleCheckFilled } from "@tabler/icons-react";
 // import Template from "@/components/reuseables/invoice/template";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { FlatInvoiceType } from "@/types/next-auth";
+import {
+  FlatInvoiceType,
+  SearchCompanyResType,
+  SearchType,
+} from "@/types/next-auth";
 import Newinvoice from "@/components/reuseables/invoice/newinvoice";
 import { useUxContext } from "@/context/userux";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useDelayedTrue } from "@/app/_hooks/delayedStart";
 import Bloader from "@/components/reuseables/b-loader";
-import {
-  IconAlertTriangleFilled,
-  IconRosetteDiscountCheckFilled,
-  IconX,
-} from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
+import { useGlobalNotify } from "@/context/globalnotifcations";
+import { Separator } from "@/components/ui/separator";
+
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
 
 const services = [
   { id: 0, name: "App Development", price: 100000, frequency: "once-off" },
@@ -53,6 +57,7 @@ export default function Invoice() {
 
   const { isSelected, setIsSelected } = useFormInvoice();
   const { uxloading, toggleLoading } = useUxContext();
+  const { setGlobalNotification, setGlobalErrorMessage } = useGlobalNotify();
 
   const [flat, setFlat] = useState<FlatInvoiceType[]>([]);
 
@@ -72,15 +77,28 @@ export default function Invoice() {
   const [isExpDate, setExpDate] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const [isFormError, setFormError] = useState("");
   // const [isFormErrorCard, setFormCardError] = useState("");
 
-  const [isSendLogCompanyData, setIsLogCompanyData] = useState("");
-  const [isSendLoader, setSendLoader] = useState(false);
+  // const [isSendLogCompanyData, setIsLogCompanyData] = useState("");
+  // const [isSendLoader, setSendLoader] = useState(false);
   const [isLogSuccess, setLogSuccess] = useState(false);
-  const [isSuccessMsg, setSuccessMsg] = useState("");
+  // const [isSuccessMsg, setSuccessMsg] = useState("");
   const delay = 3000;
+  const SERVICE_FEE = 500; // constant fee
+  // const [isCreateInvoiceBtn, setInvoiceBtn] = useState(false);
+
+  // const [isSearchCompEmail, searchCompanyData] = useState("");
+  const [isSearchResults, setSearchResults] = useState<SearchType[]>([]);
+  const [isAddedCompanyID, setIsAddedCompanyID] = useState<number>();
+  const [isSearchSelectedCompany, setSearchSelectedCompany] = useState<
+    SearchCompanyResType | undefined
+  >(undefined);
+
+  const [isRadioSelected, setRadioSelected] = useState("default");
 
   // useEffect(() => {
   //   setIsCreateInvoice(false);
@@ -102,13 +120,48 @@ export default function Invoice() {
     if (isLogSuccess) {
       timer = setTimeout(() => {
         setLogSuccess(false);
-        setIsCreateInvoice(true);
-        console.log(isCreateInvoice, "is Create Invoice not True?");
+        // setInvoiceBtn(true);
       }, delay); // ✅ false after delay
     }
 
     return () => clearTimeout(timer);
   }, [isLogSuccess]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isFormError != "") {
+      timer = setTimeout(() => {
+        setFormError("");
+        console.log("Form Error Empty");
+      }, 4000); // ✅ false after delay
+    }
+
+    return () => clearTimeout(timer);
+  }, [isFormError]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        if (searchInputRef.current) {
+          searchInputRef.current.value = "";
+          setSearchResults([]);
+        }
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(isRadioSelected);
+  }, [isRadioSelected]);
 
   // useEffect(() => {
   //   let timer: NodeJS.Timeout;
@@ -212,9 +265,146 @@ export default function Invoice() {
   //   return id;
   // };
 
-  const SumbitCompanyDetails = () => {
-    setSendLoader(true);
+  const searchCompanyEmailData = (search: string) => {
+    console.log(search);
+    if (search.length >= 3 && search.length % 3 === 0) {
+      fetch("/api/functions/search_email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyEmail: search,
+        }),
+      })
+        .then(async (res) => {
+          const data = await res.json(); // ✅ read once
 
+          if (!res.ok) {
+            // setIsLogCompanyData(data.error || "Unknown error");
+            // throw new Error(`Server error: ${res.status}`);
+            setLogSuccess(false);
+            setGlobalNotification(true);
+            setGlobalErrorMessage(data.error || "Unknown error");
+          }
+
+          setSearchResults(data.res);
+        })
+        .catch((err) => {
+          // setLogSuccess(true);
+          console.error("Request failed:", err.message);
+        });
+    } else {
+      setSearchResults([]);
+    }
+
+    // clean the state
+  };
+
+  // const checkCompanyRecords = () => {
+  //   setSendLoader(true);
+  //   if (
+  //     !isCompanyName ||
+  //     !isCompanyEmail ||
+  //     !isCompanyContact ||
+  //     isSelected == -1
+  //   ) {
+  //     setFormError("Inputs error - Please check if you inserted data!!!");
+  //     setSendLoader(false);
+  //   } else {
+  //     fetch("/api/functions/addcompany", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         companyName: isCompanyName,
+  //         companyEmail: isCompanyEmail,
+  //         companyContact: isCompanyContact,
+  //       }),
+  //     })
+  //       .then(async (res) => {
+  //         const data = await res.json(); // ✅ read once
+
+  //         if (!res.ok) {
+  //           setIsLogCompanyData(data.error || "Unknown error");
+  //           // throw new Error(`Server error: ${res.status}`);
+  //           setLogSuccess(false);
+  //           setSendLoader(false);
+  //           setGlobalNotification(true);
+  //           setGlobalErrorMessage(data.error || "Unknown error");
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         // setLogSuccess(true);
+  //         console.error("Request failed:", err.message);
+  //       });
+
+  //     // clean the state
+  //   }
+  // };
+
+  const SearchSubmitInvoice = () => {
+    if (isSelected == -1) {
+      setFormError("Service not selected!!");
+    } else {
+      if (isSearchSelectedCompany) {
+        services.map((entry) => {
+          if (entry.id === isSelected) {
+            setFlat((prev) => {
+              const updated = [...prev];
+              const existingIndex = updated.findIndex(
+                (item) =>
+                  item.companyName === isSearchSelectedCompany?.companyName &&
+                  item.companyEmail === isSearchSelectedCompany?.companyEmail &&
+                  item.companyContact ===
+                    isSearchSelectedCompany?.companyContact
+              );
+
+              const newService = {
+                name: entry.name,
+                price: entry.price,
+                frequency: entry.frequency,
+              };
+
+              if (existingIndex !== -1) {
+                // Merge service into existing company
+                const existing = updated[existingIndex];
+                existing.service.push(newService);
+                existing.total =
+                  existing.service.reduce((sum, s) => sum + s.price, 0) +
+                  SERVICE_FEE;
+                updated[existingIndex] = existing;
+                return updated;
+              }
+
+              // Create new company entry
+              return [
+                ...updated,
+                {
+                  companyName: isSearchSelectedCompany?.companyName,
+                  companyEmail: isSearchSelectedCompany?.companyEmail,
+                  companyContact: Number(
+                    isSearchSelectedCompany?.companyContact
+                  ),
+                  service: [newService],
+                  invoiceId: generateInvoiceId(),
+                  total: entry.price + SERVICE_FEE,
+                  servicefee: SERVICE_FEE,
+                },
+              ];
+            });
+          }
+        });
+      }
+
+      setIsCreateInvoice(true);
+
+      // console.log(flat);
+    }
+  };
+
+  const SumbitCompanyDetails = () => {
     if (
       !isCompanyName ||
       !isCompanyEmail ||
@@ -222,93 +412,57 @@ export default function Invoice() {
       isSelected == -1
     ) {
       setFormError("Inputs error - Please check if you inserted data!!!");
-      setSendLoader(false);
     } else {
       // console.log(isCompanyName, isCompanyEmail, isCompanyContact);
       // setIsCreateInvoice(true);
 
-      fetch("/api/functions/addcompany", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          companyName: isCompanyName,
-          companyEmail: isCompanyEmail,
-          companyContact: isCompanyContact,
-        }),
-      })
-        .then(async (res) => {
-          const data = await res.json(); // ✅ read once
+      services.map((entry) => {
+        if (entry.id === isSelected) {
+          setFlat((prev) => {
+            const updated = [...prev];
+            const existingIndex = updated.findIndex(
+              (item) =>
+                item.companyName === isCompanyName &&
+                item.companyEmail === isCompanyEmail &&
+                item.companyContact === Number(isCompanyContact)
+            );
 
-          if (!res.ok) {
-            setIsLogCompanyData(data.error || "Unknown error");
-            // throw new Error(`Server error: ${res.status}`);
-            setLogSuccess(false);
-          } else {
-            // success path
-            setLogSuccess(true);
-            setSuccessMsg(data.msg);
+            const newService = {
+              name: entry.name,
+              price: entry.price,
+              frequency: entry.frequency,
+            };
 
-            const SERVICE_FEE = 500; // constant fee
+            if (existingIndex !== -1) {
+              // Merge service into existing company
+              const existing = updated[existingIndex];
+              existing.service.push(newService);
+              existing.total =
+                existing.service.reduce((sum, s) => sum + s.price, 0) +
+                SERVICE_FEE;
+              updated[existingIndex] = existing;
+              return updated;
+            }
 
-            services.map((entry) => {
-              if (entry.id === isSelected) {
-                setFlat((prev) => {
-                  const updated = [...prev];
-                  const existingIndex = updated.findIndex(
-                    (item) =>
-                      item.companyName === isCompanyName &&
-                      item.companyEmail === isCompanyEmail &&
-                      item.companyContact === Number(isCompanyContact)
-                  );
-
-                  const newService = {
-                    name: entry.name,
-                    price: entry.price,
-                    frequency: entry.frequency,
-                  };
-
-                  if (existingIndex !== -1) {
-                    // Merge service into existing company
-                    const existing = updated[existingIndex];
-                    existing.service.push(newService);
-                    existing.total =
-                      existing.service.reduce((sum, s) => sum + s.price, 0) +
-                      SERVICE_FEE;
-                    updated[existingIndex] = existing;
-                    return updated;
-                  }
-
-                  // Create new company entry
-                  return [
-                    ...updated,
-                    {
-                      companyName: isCompanyName,
-                      companyEmail: isCompanyEmail,
-                      companyContact: Number(isCompanyContact),
-                      service: [newService],
-                      invoiceId: generateInvoiceId(),
-                      total: entry.price + SERVICE_FEE,
-                      servicefee: SERVICE_FEE,
-                    },
-                  ];
-                });
-              }
-            });
-          }
-        })
-        .catch((err) => {
-          // setLogSuccess(true);
-          console.error("Request failed:", err.message);
-        });
-
-      // clean the state
-      setSendLoader(false);
-      setFormError("");
-      setCompanyName("");
-      setCompanyEmail("");
-      setComapanyContact("");
+            // Create new company entry
+            return [
+              ...updated,
+              {
+                companyName: isCompanyName,
+                companyEmail: isCompanyEmail,
+                companyContact: Number(isCompanyContact),
+                service: [newService],
+                invoiceId: generateInvoiceId(),
+                total: entry.price + SERVICE_FEE,
+                servicefee: SERVICE_FEE,
+              },
+            ];
+          });
+        }
+      });
+      // setCompanyName("");
+      // setCompanyEmail("");
+      // setComapanyContact("");
     }
   };
 
@@ -325,7 +479,7 @@ export default function Invoice() {
     <div className="relative min-h-[100vh]">
       <Header />
 
-      {isLogSuccess && (
+      {/* {isLogSuccess && (
         <motion.div
           initial={{ opacity: 0.2 }}
           exit={{
@@ -366,9 +520,9 @@ export default function Invoice() {
             </button>
           </motion.div>
         </motion.div>
-      )}
+      )} */}
 
-      {isSendLoader ? (
+      {/* {isSendLoader ? (
         <motion.div
           exit={{ opacity: 0 }}
           initial={{ opacity: 0.2 }}
@@ -405,7 +559,7 @@ export default function Invoice() {
             </div>
           </motion.div>
         )
-      )}
+      )} */}
 
       {isCreateInvoice == true ? (
         <motion.div
@@ -421,6 +575,9 @@ export default function Invoice() {
                 onClick={() => {
                   setIsCreateInvoice(false);
                   setFlat([]);
+                  setSearchSelectedCompany(undefined);
+                  setIsAddedCompanyID(undefined);
+                  setSearchResults([]);
                 }}
                 className="mt-[40px] cursor-pointer w-[200px] h-[50px] bg-red-500 text-white rounded-2xl shadow-sm inset-shadow-sm"
               >
@@ -439,96 +596,334 @@ export default function Invoice() {
         <div className="h-[100px] mt-[20px] py-[10px] w-full justify-center flex items-center">
           <h1 className="text-2xl font-semibold font-mono">Client Details</h1>
         </div>
-        <div className="flex gap-4 justify-center flex-col-reverse md:flex-row items-center my-[30px]">
-          <motion.div
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0.2 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
+        <RadioGroup
+          defaultValue="default"
+          onValueChange={setRadioSelected}
+          className="flex-col flex md:flex-row"
+        >
+          <div
+            className={`${
+              isRadioSelected == "default" && "bg-[#f0f0f0] "
+            } flex items-center gap-3 flex-col p-[10px] md:p-[20px] w-full pt-[10px]  rounded-2xl shadow-sm inset-shadow-sm`}
           >
-            <form
-              action=""
-              className="px-[20px] w-[370px] sm:w-[430px] h-auto flex flex-col gap-4 dark:bg-[#292929] py-[40px] rounded-3xl"
+            <div className="flex flex-row items-center justify-start gap-3 w-[370px]">
+              <RadioGroupItem
+                className="cursor-pointer shadow-sm inset-shadow-sm bg-[#fff] dark:bg-background"
+                value="default"
+                id="r1"
+              />
+              <Label htmlFor="r1" className="text-2xl">
+                Search Emails In Database
+              </Label>
+            </div>
+            <div
+              className={`flex gap-4 ${
+                isRadioSelected != "default" &&
+                "opacity-25 transition duration-150 ease-in pointer-events-none"
+              } justify-center flex-col items-center`}
+              ref={searchContainerRef}
             >
-              <div className="gap-[20px] flex flex-col">
-                {isFormError && (
-                  <div>
-                    <p className="text-red-600">{isFormError}</p>
-                  </div>
-                )}
-
+              <form
+                action=""
+                className="mb-[20px] px-[20px] w-[370px] sm:w-[430px] h-auto flex flex-col gap-4 dark:bg-[#292929] bg-[#ffffff] shadow-sm py-[40px] rounded-3xl"
+              >
                 <div className="flex gap-4 ">
-                  <Label className="w-[100px]">Company Name</Label>
+                  <Label className="w-[100px]">Search Email</Label>
                   <Input
-                    name="name"
+                    name="searchQuery"
                     type="text"
-                    onChange={(e) => setCompanyName(e.target.value)}
+                    ref={searchInputRef}
+                    onChange={(e) => {
+                      // searchCompanyData(e.target.value);
+                      searchCompanyEmailData(e.target.value);
+                    }}
                     placeholder="Company name e.g.(govlead group)"
                     className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
                   />
                 </div>
+              </form>
 
-                <div className="flex gap-4 ">
-                  <Label className="w-[100px]">Company Email</Label>
-                  <Input
-                    name="email"
-                    type="email"
-                    onChange={(e) => setCompanyEmail(e.target.value)}
-                    placeholder="Company email e.g.(govlead@email.co.za)"
-                    className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
-                  />
+              {isSearchResults.length > 0 && (
+                <div className="relative w-full">
+                  <motion.div
+                    initial={{ y: "-100%", opacity: 0 }}
+                    exit={{
+                      x: "-100%",
+                      opacity: 0,
+                      transition: { duration: 0.4, ease: "easeOut" },
+                    }}
+                    animate={{
+                      y: 0,
+                      opacity: 1,
+                      transition: { duration: 0.1, ease: "easeIn" },
+                    }}
+                    className="absolute z-20 top-[-40px] left-0 h-auto w-[370px] dark:bg-[#575757] bg-[#f0f0f0] shadow-md inset-shadow-sm rounded-2xl p-2"
+                  >
+                    <div className="w-full px-[15px] my-2 dark:bg-[#686868] rounded-2xl">
+                      we found...
+                    </div>
+                    <div>
+                      {isSearchResults.map((entry, idx) => (
+                        <div
+                          key={idx}
+                          className="h-auto flex-col flex items-start px-4 "
+                        >
+                          <div className="gap-2 h-[30px] w-full flex-row flex justify-start items-center">
+                            <p>{idx + 1} </p>
+                            <div className="flex flex-row justify-between w-full">
+                              <p>{entry.email}</p>
+                              <button
+                                onClick={() => {
+                                  setIsAddedCompanyID(entry.id);
+                                  setSearchResults([]);
+                                  setSearchSelectedCompany({
+                                    companyName: entry.name,
+                                    companyEmail: entry.email,
+                                    companyContact: Number(entry.contactNumber),
+                                  });
+                                }}
+                                className=" cursor-pointer flex flex-row bg-[#3c3c3c] dark:bg-white px-2 rounded-2xl dark:text-black text-white text-[10px] justify-center items-center gap-[2px]"
+                              >
+                                add <IconPlus size={15} />
+                              </button>
+                            </div>
+                          </div>
+
+                          {idx + 1 != isSearchResults.length && (
+                            <Separator className="my-[5px]" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <Separator className="mt-2" />
+                    <div className="flex w-full rounded-2xl hover:dark:bg-[#3c3c3ce3] hover:bg-[#e6e5e5] flex-row justify-center items-center h-[50px]">
+                      <button
+                        onClick={() => {
+                          if (searchInputRef.current) {
+                            searchInputRef.current.value = "";
+                            setSearchResults([]);
+                          }
+                        }}
+                        className="cursor-pointer w-full"
+                      >
+                        clear Search
+                      </button>
+                    </div>
+                  </motion.div>
                 </div>
+              )}
 
-                <div className="flex gap-4 ">
-                  <Label className="w-[100px]">Company Contact</Label>
-                  <Input
-                    name="contact"
-                    type="digit"
-                    onChange={(e) => setComapanyContact(e.target.value)}
-                    placeholder="+27 99 999 9999"
-                    className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
-                  />
-                </div>
+              {isAddedCompanyID && (
+                <div className="flex flex-col gap-2">
+                  <form
+                    action=""
+                    className="px-[20px] w-[370px] sm:w-[430px] h-auto flex flex-col gap-4 dark:bg-[#292929] bg-[#ffffff] shadow-sm py-[40px] rounded-3xl"
+                  >
+                    <div className="gap-[20px] flex flex-col">
+                      {isFormError && (
+                        <div>
+                          <p className="text-red-600">{isFormError}</p>
+                        </div>
+                      )}
 
-                <div className="flex gap-4 ">
-                  <Label className="w-[300px]">Pick Service</Label>
-                  <Select
-                    onValueChange={(value) => {
-                      // console.log("Options: ", value);
-                      setIsSelected(Number(value));
+                      <p>Creating invoice for [insert Name Here]</p>
+
+                      <div className="flex gap-4 ">
+                        <Label className="w-[300px]">Pick Service</Label>
+                        <Select
+                          onValueChange={(value) => {
+                            // console.log("Options: ", value);
+                            setIsSelected(Number(value));
+                          }}
+                        >
+                          <SelectTrigger className="w-[300px] h-[50px] rounded-4xl bg-[#fff] md:w-full justify-between items-center">
+                            <SelectValue
+                              className=" h-[50px]"
+                              placeholder="Select a service"
+                            />
+                          </SelectTrigger>
+                          <SelectContent className="w-[300px]">
+                            <SelectGroup>
+                              <SelectLabel>Service Options</SelectLabel>
+                              {services.map((entry, idx) => (
+                                <div key={idx}>
+                                  <SelectItem value={`${entry.id}`}>
+                                    {entry.name}
+                                  </SelectItem>
+                                </div>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </form>
+                  <Button
+                    className="h-[60px] rounded-full cursor-pointer"
+                    onClick={() => {
+                      SearchSubmitInvoice();
                     }}
                   >
-                    <SelectTrigger className="w-[300px] h-[50px] rounded-4xl bg-[#fff] md:w-full justify-between items-center">
-                      <SelectValue
-                        className=" h-[50px]"
-                        placeholder="Select a service"
-                      />
-                    </SelectTrigger>
-                    <SelectContent className="w-[300px]">
-                      <SelectGroup>
-                        <SelectLabel>Service Options</SelectLabel>
-                        {services.map((entry, idx) => (
-                          <div key={idx}>
-                            <SelectItem value={`${entry.id}`}>
-                              {entry.name}
-                            </SelectItem>
-                          </div>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                    Create Invoice
+                  </Button>
                 </div>
-              </div>
-            </form>
-          </motion.div>
-          <motion.div
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0.2 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-            className="md:h-[300px] h-[2px] w-[300px] md:w-[2px] bg-[#fff]"
-          ></motion.div>
-          <motion.div
+              )}
+            </div>
+          </div>
+          <div
+            className={`${
+              isRadioSelected == "new_company" && "bg-[#f0f0f0] "
+            } flex items-center gap-3 flex-col p-[10px] md:p-[20px] mt-2 rounded-2xl shadow-sm inset-shadow-sm pt-[10px]`}
+          >
+            <div className="flex fel-row w-[370px] justify-start items-center gap-3">
+              <RadioGroupItem
+                className="cursor-pointer shadow-sm inset-shadow-sm bg-[#fff] dark:bg-background"
+                value="new_company"
+                id="r2"
+              />
+              <Label htmlFor="r2" className="text-2xl">
+                Create New Email Invoice
+              </Label>
+            </div>
+            <div
+              className={`flex gap-4 ${
+                isRadioSelected != "new_company" &&
+                "opacity-25 transition duration-150 ease-in pointer-events-none"
+              } justify-center flex-col-reverse md:flex-row items-center`}
+            >
+              <motion.div
+                exit={{ opacity: 0 }}
+                initial={{ opacity: 0.2 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <form
+                  action=""
+                  className="px-[20px] w-[370px] sm:w-[430px] h-auto flex flex-col gap-4 dark:bg-[#292929] bg-[#ffffff] shadow-sm py-[40px] rounded-3xl"
+                >
+                  <div className="gap-[20px] flex flex-col">
+                    {isFormError && (
+                      <div>
+                        <p className="text-red-600">{isFormError}</p>
+                      </div>
+                    )}
+
+                    <div className="flex gap-4 ">
+                      <Label className="w-[100px]">Company Name</Label>
+                      <Input
+                        name="name"
+                        type="text"
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        placeholder="Company name e.g.(govlead group)"
+                        className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
+                      />
+                    </div>
+
+                    <div className="flex gap-4 ">
+                      <Label className="w-[100px]">Company Email</Label>
+                      <Input
+                        name="email"
+                        type="email"
+                        onChange={(e) => setCompanyEmail(e.target.value)}
+                        placeholder="Company email e.g.(govlead@email.co.za)"
+                        className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
+                      />
+                    </div>
+
+                    <div className="flex gap-4 ">
+                      <Label className="w-[100px]">Company Contact</Label>
+                      <Input
+                        name="contact"
+                        type="digit"
+                        onChange={(e) => setComapanyContact(e.target.value)}
+                        placeholder="+27 99 999 9999"
+                        className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
+                      />
+                    </div>
+
+                    <div className="flex gap-4 ">
+                      <Label className="w-[100px]">Company Address</Label>
+                      <Input
+                        name="main_address"
+                        type="text"
+                        placeholder="Address..."
+                        className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
+                      />
+                    </div>
+
+                    <div className="flex gap-4 ">
+                      <Label className="w-[300px]">Pick Service</Label>
+                      <Select
+                        onValueChange={(value) => {
+                          // console.log("Options: ", value);
+                          setIsSelected(Number(value));
+                        }}
+                      >
+                        <SelectTrigger className="w-[300px] h-[50px] rounded-4xl bg-[#fff] md:w-full justify-between items-center">
+                          <SelectValue
+                            className=" h-[50px]"
+                            placeholder="Select a service"
+                          />
+                        </SelectTrigger>
+                        <SelectContent className="w-[300px]">
+                          <SelectGroup>
+                            <SelectLabel>Service Options</SelectLabel>
+                            {services.map((entry, idx) => (
+                              <div key={idx}>
+                                <SelectItem value={`${entry.id}`}>
+                                  {entry.name}
+                                </SelectItem>
+                              </div>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </form>
+                {/* <div className="p-2 flex justify-center items-center w-full my-[10px]">
+                  <button
+                    className="cursor-pointer h-[40px] w-auto px-[10px] rounded-4xl bg-[#369b3f] text-white"
+                    onClick={() => {
+                      checkCompanyRecords();
+                    }}
+                  >
+                    {isSendLoader ? (
+                      <div className="flex flex-row justify-center items-center gap-2">
+                        <Bloader /> <p>loading...</p>
+                      </div>
+                    ) : (
+                      "check company record?"
+                    )}
+                  </button>
+                </div> */}
+                {!isOpenCreditEdit && (
+                  <motion.div
+                    exit={{ opacity: 0 }}
+                    initial={{ opacity: 0.2 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="mt-[20px] w-full flex justify-center"
+                  >
+                    <button
+                      onClick={() => {
+                        setOpenCreditEdit((prev) => !prev);
+                      }}
+                      className="cursor-pointer h-[40px] w-auto px-[20px] rounded-4xl bg-black text-white dark:bg-[#f0f0f0] dark:text-black"
+                    >
+                      {isReady ? (
+                        <div className="flex flex-row gap-2 items-center">
+                          <Bloader /> <p>linking...</p>
+                        </div>
+                      ) : (
+                        "Add Credit Card"
+                      )}
+                    </button>
+                  </motion.div>
+                )}
+              </motion.div>
+
+              {/* <motion.div
             exit={{ opacity: 0 }}
             initial={{ opacity: 0.2 }}
             animate={{ opacity: 1 }}
@@ -544,45 +939,26 @@ export default function Invoice() {
             <h3>
               {isCompanyContact == "" ? "+27 00 000 0000" : isCompanyContact}
             </h3>
-          </motion.div>
-        </div>
+          </motion.div> */}
+            </div>
+          </div>
+        </RadioGroup>
 
-        {!isOpenCreditEdit && (
-          <motion.div
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0.2 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
+        {isOpenCreditEdit && (
+          <div className="mb-[10px]">
             <button
+              className="flex mt-[20px] h-[40px] bg-black text-white w-[200px] cursor-pointer dark:bg-[#2e2e2e] rounded-4xl justify-center items-center"
               onClick={() => {
-                setOpenCreditEdit((prev) => !prev);
+                setOpenCreditEdit(false);
               }}
-              className="cursor-pointer h-[40px] w-auto px-[20px] rounded-4xl bg-black text-white dark:bg-[#f0f0f0] dark:text-black"
             >
-              {isReady ? (
-                <div className="flex flex-row gap-2 items-center">
-                  <Bloader /> <p>linking...</p>
-                </div>
-              ) : (
-                "Add Credit Card"
-              )}
+              Remove Credit Card
             </button>
-          </motion.div>
+          </div>
         )}
 
         {isOpenCreditEdit && (
-          <div className="flex gap-4 justify-center flex-col md:flex-row items-center">
-            <div className="mb-[10px]">
-              <button
-                className="flex h-[40px] w-[200px] cursor-pointer dark:bg-[#2e2e2e] rounded-4xl justify-center items-center"
-                onClick={() => {
-                  setOpenCreditEdit(false);
-                }}
-              >
-                Remove Credit Card
-              </button>
-            </div>
+          <div className="flex gap-4 justify-center flex-col md:flex-row dark:bg-[#575757] bg-[#f0f0f0] shadow-md inset-shadow-sm items-center rounded-2xl md:px-[20px]">
             <motion.div
               exit={{ opacity: 0 }}
               initial={{ opacity: 0.2 }}
@@ -720,18 +1096,6 @@ export default function Invoice() {
         </motion.div> */}
       </div>
 
-      {/* <div className="flex justify-center items-center ">
-        <div className="w-full flex justify-center items-center mb-[40px] bg-pink-500 h-auto p-[20px] md:max-w-[85vw] lg:max-w-[80vw]">
-          <Button
-            onClick={() => {
-              setIsCreateInvoice(true);
-            }}
-            className="cursor-pointer w-[300px] h-[100px] "
-          >
-            Create Invoice
-          </Button>
-        </div>
-      </div> */}
       <div className="flex justify-center items-center mt-5">
         <div className="w-full flex justify-center items-center mb-[40px] h-auto px-[20px] md:max-w-[85vw] lg:max-w-[80vw]">
           <Button

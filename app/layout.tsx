@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import CustomThemeProvider from "@/context/themeContext";
 import { FormInvoiceContextProvider } from "@/context/createinvoice-form";
 import UxContextProvider from "@/context/userux";
+import GlobalNotifyContextProvider from "@/context/globalnotifcations";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,15 +41,17 @@ export default function RootLayout({
           defaultTheme="system"
         >
           <SessionProvider>
-            <UxContextProvider>
-              <CustomThemeProvider>
-                <MenuProvider>
-                  <FormInvoiceContextProvider>
-                    {children}
-                  </FormInvoiceContextProvider>
-                </MenuProvider>
-              </CustomThemeProvider>
-            </UxContextProvider>
+            <GlobalNotifyContextProvider>
+              <UxContextProvider>
+                <CustomThemeProvider>
+                  <MenuProvider>
+                    <FormInvoiceContextProvider>
+                      {children}
+                    </FormInvoiceContextProvider>
+                  </MenuProvider>
+                </CustomThemeProvider>
+              </UxContextProvider>
+            </GlobalNotifyContextProvider>
           </SessionProvider>
         </ThemeProvider>
       </body>

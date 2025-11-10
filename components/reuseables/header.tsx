@@ -1,10 +1,13 @@
 "use client";
 
 import {
+  IconAlertTriangleFilled,
   IconBrightnessUpFilled,
   IconDoorExit,
   IconMenu2,
   IconMoonFilled,
+  IconRosetteDiscountCheckFilled,
+  IconX,
 } from "@tabler/icons-react";
 
 import React, { useContext, useState } from "react";
@@ -21,6 +24,7 @@ import SignOutButton from "./logout/logout";
 import { Ring } from "ldrs/react";
 import { useSession } from "next-auth/react";
 import { useUxContext } from "@/context/userux";
+import { useGlobalNotify } from "@/context/globalnotifcations";
 
 export default function header() {
   const { isOpen, setIsOpen } = useMenu();
@@ -28,13 +32,80 @@ export default function header() {
   const { data: session } = useSession();
   const { uxloading, toggleLoading } = useUxContext();
 
+  const { globalNotification, setGlobalNotification, globalErrorMessage } =
+    useGlobalNotify();
+
   const { currentTheme, toggleTheme } = useContext(ThemeContext);
   const { theme, setTheme } = useTheme();
 
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className=" w-full md:px-[5%] lg:px-[10%] bg-[#ffffff] dark:bg-[#5c5c5c] shadow-sm">
+    <div className="relative w-full md:px-[5%] lg:px-[10%] bg-[#ffffff] dark:bg-[#5c5c5c] shadow-sm">
+      {globalNotification && (
+        <motion.div
+          initial={{ opacity: 0.2 }}
+          exit={{
+            opacity: 0,
+            transition: { duration: 0.6, ease: "easeOut" },
+          }}
+          animate={{
+            opacity: 1,
+            transition: { duration: 0.25, ease: "easeIn" },
+          }}
+          className="absolute z-20 flex justify-center items-center w-full h-[200px] md:h-[100px] dark:bg-[#3636368f] bg-[#f3f3f38f]"
+        >
+          {globalErrorMessage != "" && (
+            <motion.div
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0.2 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.25 }}
+              className="flex justify-center items-center flex-row w-[300px] gap-[10px] px-[10px] py-[10px] rounded-2xl shadow-sm dark:shadow-[#242424] h-auto bg-[#b14b4b] dark:bg-[#963f3f] dark:text-white"
+            >
+              <IconAlertTriangleFilled size={40} className="mx-4" />
+              <p className="max-w-[180px] mx-[5px] flex justify-center items-center">
+                {globalErrorMessage}
+              </p>
+              <button
+                onClick={() => {
+                  setGlobalNotification(false);
+                }}
+                className="  h-[30px] w-[30px]  cursor-pointer rounded-3xl hover:rotate-[45deg] ease-in-out transition-transform duration-250 hover:bg-[#2e2e2e] flex justify-center items-center"
+              >
+                <IconX size={20} />
+              </button>
+            </motion.div>
+          )}
+
+          {/* <motion.div
+            initial={{ y: "-100%", opacity: 0 }}
+            exit={{
+              y: "-100%",
+              opacity: 0,
+              transition: { duration: 0.6, ease: "easeOut" },
+            }}
+            animate={{
+              y: 0,
+              opacity: 1,
+              transition: { duration: 0.25, ease: "easeIn" },
+            }}
+            className="flex bg-amber-400 h-[100px] w-[200px] flex-row px-[20px] items-center gap-4"
+          >
+            <div className="flex flex-row justify-start gap-4 px-[40px] py-[10px] items-center w-[300px] rounded-2xl dark:bg-[#49b334] bg-[#49b334] dark:text-white text-white shadow-[#4b4b4b] shadow-sm inset-shadow-sm">
+              <IconRosetteDiscountCheckFilled color="white" />
+            </div>
+            <button
+              onClick={() => {
+                setGlobalNotification(false);
+              }}
+              className=" h-[30px] w-[30px] cursor-pointer rounded-3xl hover:rotate-[45deg] ease-in-out transition-transform duration-250 hover:dark:bg-[#2e2e2e] flex justify-center items-center"
+            >
+              <IconX />
+            </button>
+          </motion.div> */}
+        </motion.div>
+      )}
       <div className="flex flex-row w-full items-center justify-between ">
         {/** Logo image */}
         <div className="flex justify-center items-center h-[80px] w-auto  object-cover">

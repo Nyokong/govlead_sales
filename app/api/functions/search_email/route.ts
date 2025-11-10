@@ -1,12 +1,12 @@
 import { db } from "@/db";
 import { companies } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { ilike } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { companyName, companyEmail, companyContact } = await req.json();
+  const { companyEmail } = await req.json();
 
-  if (!companyName || !companyEmail || !companyContact) {
+  if (!companyEmail || companyEmail.length < 3) {
     return NextResponse.json(
       {
         error: "No-Data inserted",
@@ -19,21 +19,15 @@ export async function POST(req: Request) {
     const isCompanyDb = await db
       .select()
       .from(companies)
-      .where(eq(companies.email, companyEmail));
+      .where(ilike(companies.email, `%${companyEmail}%`));
 
-    if (isCompanyDb.length < 1) {
-      await db.insert(companies).values({
-        name: companyName,
-        email: companyEmail,
-        contactNumber: companyContact,
-      });
-    } else {
-      throw new Error("Company Email Already Exist ");
+    if (!isCompanyDb) {
+      console.log(companyEmail);
     }
 
     return NextResponse.json(
       {
-        msg: "inserted the data successfully",
+        res: isCompanyDb,
       },
       { status: 200 }
     );
