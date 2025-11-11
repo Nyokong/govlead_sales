@@ -9,7 +9,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MdClose } from "react-icons/md";
@@ -17,7 +17,6 @@ import { useMenu } from "@/context/side-menu";
 import { motion } from "motion/react";
 import { Label } from "../ui/label";
 import { Separator } from "@/components/ui/separator";
-import { ThemeContext } from "@/context/themeContext";
 import { useTheme } from "next-themes";
 import SignOutButton from "./logout/logout";
 import { Ring } from "ldrs/react";
@@ -31,10 +30,13 @@ export default function header() {
   const { data: session } = useSession();
   const { uxloading, toggleLoading } = useUxContext();
 
-  const { globalNotification, setGlobalNotification, globalErrorMessage } =
-    useGlobalNotify();
+  const {
+    globalSuccessMessage,
+    globalNotification,
+    globalErrorMessage,
+    setGlobalNotification,
+  } = useGlobalNotify();
 
-  const { currentTheme, toggleTheme } = useContext(ThemeContext);
   const { theme, setTheme } = useTheme();
 
   const [loading, setLoading] = useState(false);
@@ -77,34 +79,31 @@ export default function header() {
             </motion.div>
           )}
 
-          {/* <motion.div
-            initial={{ y: "-100%", opacity: 0 }}
-            exit={{
-              y: "-100%",
-              opacity: 0,
-              transition: { duration: 0.6, ease: "easeOut" },
-            }}
-            animate={{
-              y: 0,
-              opacity: 1,
-              transition: { duration: 0.25, ease: "easeIn" },
-            }}
-            className="flex bg-amber-400 h-[100px] w-[200px] flex-row px-[20px] items-center gap-4"
-          >
-            <div className="flex flex-row justify-start gap-4 px-[40px] py-[10px] items-center w-[300px] rounded-2xl dark:bg-[#49b334] bg-[#49b334] dark:text-white text-white shadow-[#4b4b4b] shadow-sm inset-shadow-sm">
-              <IconRosetteDiscountCheckFilled color="white" />
-            </div>
-            <button
-              onClick={() => {
-                setGlobalNotification(false);
-              }}
-              className=" h-[30px] w-[30px] cursor-pointer rounded-3xl hover:rotate-[45deg] ease-in-out transition-transform duration-250 hover:dark:bg-[#2e2e2e] flex justify-center items-center"
+          {globalSuccessMessage != "" && (
+            <motion.div
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0.2 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.25 }}
+              className="flex justify-center items-center flex-row w-[300px] gap-[10px] px-[10px] py-[10px] rounded-2xl shadow-sm dark:shadow-[#242424] h-auto bg-[#4bb14b] dark:bg-[#3f963f] dark:text-white"
             >
-              <IconX />
-            </button>
-          </motion.div> */}
+              <IconAlertTriangleFilled size={40} className="mx-4" />
+              <p className="max-w-[180px] mx-[5px] flex justify-center items-center">
+                {globalSuccessMessage}
+              </p>
+              <button
+                onClick={() => {
+                  setGlobalNotification(false);
+                }}
+                className="  h-[30px] w-[30px]  cursor-pointer rounded-3xl hover:rotate-[45deg] ease-in-out transition-transform duration-250 hover:bg-[#2e2e2e] flex justify-center items-center"
+              >
+                <IconX size={20} />
+              </button>
+            </motion.div>
+          )}
         </motion.div>
       )}
+
       <div className="flex flex-row w-full items-center justify-between ">
         {/** Logo image */}
         <div className="flex justify-center items-center h-[80px] w-auto  object-cover">
@@ -116,7 +115,7 @@ export default function header() {
               }
             }}
           >
-            {currentTheme == "dark" ? (
+            {theme == "dark" ? (
               <div className="flex flex-row gap-2 items-center">
                 <Image
                   src={"/parent_logoWTrans.png"}
@@ -150,21 +149,17 @@ export default function header() {
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
+              {/* const theme = useTheme(); // or useContext, etc. */}
+              {/* return theme === 'dark' ? <MoonFilled /> : <BrightnessUpFilled />; */}
               {theme === "dark" ? (
                 <IconMoonFilled
                   size={30}
-                  onClick={() => {
-                    toggleTheme("light");
-                  }}
                   color="white"
                   className="cursor-pointer"
                 />
               ) : (
                 <IconBrightnessUpFilled
                   size={30}
-                  onClick={() => {
-                    toggleTheme("dark");
-                  }}
                   color="black"
                   className="cursor-pointer"
                 />
@@ -193,7 +188,7 @@ export default function header() {
                     <div className="flex flex-row items-center justify-center text-black dark:text-white gap-[20px]">
                       <IconDoorExit
                         size={30}
-                        color={`${currentTheme == "dark" ? "white" : "black"}`}
+                        color={`${theme == "dark" ? "white" : "black"}`}
                       />{" "}
                       Logout
                     </div>
@@ -206,7 +201,7 @@ export default function header() {
 
         {/* Small navigation screens */}
         <div className="flex md:hidden h-[60px] w-[80px] mx-[15px] justify-center items-center">
-          {currentTheme == "dark" ? (
+          {theme == "dark" ? (
             <IconMenu2
               size={"25px"}
               color="#fff"
@@ -241,7 +236,7 @@ export default function header() {
             className="absolute z-30 top-0 right-0 w-[300px] h-screen bg-[#f7f7f7] dark:bg-[#242424] shadow-md "
           >
             <div>
-              {currentTheme == "dark" ? (
+              {theme == "dark" ? (
                 <MdClose
                   className="m-[20px] cursor-pointer"
                   onClick={() => {
@@ -270,18 +265,18 @@ export default function header() {
                   {theme === "dark" ? (
                     <IconMoonFilled
                       size={30}
-                      onClick={() => {
-                        toggleTheme("light");
-                      }}
+                      // onClick={() => {
+                      //   toggleTheme("light");
+                      // }}
                       color="white"
                       className="cursor-pointer"
                     />
                   ) : (
                     <IconBrightnessUpFilled
                       size={30}
-                      onClick={() => {
-                        toggleTheme("dark");
-                      }}
+                      // onClick={() => {
+                      //   toggleTheme("dark");
+                      // }}
                       color="black"
                       className="cursor-pointer"
                     />

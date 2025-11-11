@@ -77,7 +77,7 @@ export const creditCards = pgTable("credit_cards", {
     .references(() => companies.id, { onDelete: "cascade" }),
   cardNumber: varchar("card_number", { length: 20 }).notNull(),
   cardholderName: varchar("cardholder_name", { length: 255 }),
-  expiryDate: timestamp("expiry_date"),
+  expiryDate: varchar("expiry_date", { length: 4 }).notNull(),
   paymentMethod: varchar("payment_method", { length: 50 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });

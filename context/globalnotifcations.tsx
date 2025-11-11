@@ -13,18 +13,23 @@ export type GlobalNotifyContextType = {
   setGlobalNotification: (globalNotification: boolean) => void;
   globalErrorMessage: string;
   setGlobalErrorMessage: (globalErrorMessage: string) => void;
+  globalSuccessMessage: string;
+  setGlobalsuccessMessage: (globalSuccess: string) => void;
 };
 
 export const GlobalNotifyContext = createContext<GlobalNotifyContextType>({
   globalNotification: false,
   globalErrorMessage: "",
+  globalSuccessMessage: "",
   setGlobalNotification: () => {},
   setGlobalErrorMessage: () => {},
+  setGlobalsuccessMessage: () => {},
 });
 
 const GlobalNotifyContextProvider = ({ children }: { children: ReactNode }) => {
   const [globalNotify, setGlobalNotify] = useState<boolean>(false);
   const [ErrorMessage, setErrorMessage] = useState<string>("");
+  const [SuccessMessage, setSuccessMessage] = useState<string>("");
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -32,8 +37,10 @@ const GlobalNotifyContextProvider = ({ children }: { children: ReactNode }) => {
     if (globalNotify) {
       timer = setTimeout(() => {
         setGlobalNotify(false);
-        // ,setGlobalErrorMessage
+
+        // clean up messages
         setGlobalErrorMessage("");
+        setGlobalsuccessMessage("");
       }, 4000); // ✅ false after delay
     }
 
@@ -72,6 +79,14 @@ const GlobalNotifyContextProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const setGlobalsuccessMessage = async (isSuccess: string) => {
+    if (SuccessMessage == "") {
+      setSuccessMessage(isSuccess);
+    } else {
+      setSuccessMessage("");
+    }
+  };
+
   return (
     <GlobalNotifyContext.Provider
       value={{
@@ -79,6 +94,8 @@ const GlobalNotifyContextProvider = ({ children }: { children: ReactNode }) => {
         setGlobalNotification,
         globalErrorMessage: ErrorMessage,
         setGlobalErrorMessage,
+        globalSuccessMessage: SuccessMessage,
+        setGlobalsuccessMessage,
       }}
     >
       {children}

@@ -4,9 +4,10 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { companyName, companyEmail, companyContact } = await req.json();
+  const { companyName, companyEmail, companyContact, companyAddress } =
+    await req.json();
 
-  if (!companyName || !companyEmail || !companyContact) {
+  if (!companyName || !companyEmail || !companyContact || !companyAddress) {
     return NextResponse.json(
       {
         error: "No-Data inserted",
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
         name: companyName,
         email: companyEmail,
         contactNumber: companyContact,
+        address: companyAddress,
       });
     } else {
       throw new Error("Company Email Already Exist ");

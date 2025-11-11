@@ -22,6 +22,13 @@
       "when": 1762421443617,
       "tag": "0002_cheerful_slayback",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1762855652789,
+      "tag": "0003_breezy_madame_masque",
+      "breakpoints": true
     }
   ]
 }

@@ -27,7 +27,6 @@ import Newinvoice from "@/components/reuseables/invoice/newinvoice";
 import { useUxContext } from "@/context/userux";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { useDelayedTrue } from "@/app/_hooks/delayedStart";
 import Bloader from "@/components/reuseables/b-loader";
 import { IconPlus } from "@tabler/icons-react";
 import { useGlobalNotify } from "@/context/globalnotifcations";
@@ -51,26 +50,44 @@ const services = [
   },
 ];
 
+const frequencies = [
+  { value: "once-off" },
+  { value: "every-week" },
+  { value: "every-month" },
+  { value: "every-year-end" },
+];
+
 export default function Invoice() {
   // const { currentTheme, toggleTheme } = useContext(ThemeContext);
   // const flat: FlatInvoiceType[] = [];
 
   const { isSelected, setIsSelected } = useFormInvoice();
   const { uxloading, toggleLoading } = useUxContext();
-  const { setGlobalNotification, setGlobalErrorMessage } = useGlobalNotify();
+  const {
+    setGlobalNotification,
+    setGlobalErrorMessage,
+    setGlobalsuccessMessage,
+  } = useGlobalNotify();
 
   const [flat, setFlat] = useState<FlatInvoiceType[]>([]);
 
   const [isCreateInvoice, setIsCreateInvoice] = useState(false);
   const [isOpenCreditEdit, setOpenCreditEdit] = useState(false);
 
-  const isReady = useDelayedTrue(isOpenCreditEdit);
+  // const isReady = useDelayedTrue(isOpenCreditEdit);
+
+  // loaders
+  const [isSendCompDataLoader, setSendCompDataLoader] = useState(false);
+  const [isSendCreditLoader, setSendCreditLoader] = useState(false);
   // const isReady = useDelayedTrue(2000);
 
   // form inputs
   const [isCompanyName, setCompanyName] = useState("");
   const [isCompanyEmail, setCompanyEmail] = useState("");
   const [isCompanyContact, setComapanyContact] = useState("");
+  const [isCompanyAddress, setComapanyAddress] = useState("");
+
+  const [isAddedCompanyData, setIsAddedCompanyData] = useState(false);
 
   const [isCardNumber, setCardNumber] = useState(0);
   const [isCardHolderName, setCardHolderName] = useState("");
@@ -99,6 +116,7 @@ export default function Invoice() {
   >(undefined);
 
   const [isRadioSelected, setRadioSelected] = useState("default");
+  const [isPaymentFrequency, setPaymentFrequency] = useState("");
 
   // useEffect(() => {
   //   setIsCreateInvoice(false);
@@ -301,48 +319,63 @@ export default function Invoice() {
     // clean the state
   };
 
-  // const checkCompanyRecords = () => {
-  //   setSendLoader(true);
-  //   if (
-  //     !isCompanyName ||
-  //     !isCompanyEmail ||
-  //     !isCompanyContact ||
-  //     isSelected == -1
-  //   ) {
-  //     setFormError("Inputs error - Please check if you inserted data!!!");
-  //     setSendLoader(false);
-  //   } else {
-  //     fetch("/api/functions/addcompany", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         companyName: isCompanyName,
-  //         companyEmail: isCompanyEmail,
-  //         companyContact: isCompanyContact,
-  //       }),
-  //     })
-  //       .then(async (res) => {
-  //         const data = await res.json(); // ✅ read once
+  const AddCompanyData = () => {
+    setSendCompDataLoader(true);
 
-  //         if (!res.ok) {
-  //           setIsLogCompanyData(data.error || "Unknown error");
-  //           // throw new Error(`Server error: ${res.status}`);
-  //           setLogSuccess(false);
-  //           setSendLoader(false);
-  //           setGlobalNotification(true);
-  //           setGlobalErrorMessage(data.error || "Unknown error");
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         // setLogSuccess(true);
-  //         console.error("Request failed:", err.message);
-  //       });
+    if (!isAddedCompanyData) {
+      if (
+        !isCompanyName ||
+        !isCompanyEmail ||
+        !isCompanyContact ||
+        isSelected == -1
+      ) {
+        setFormError("Inputs error - Please check if you inserted data!!!");
+      } else {
+        fetch("/api/functions/addcompany", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            companyName: isCompanyName,
+            companyEmail: isCompanyEmail,
+            companyContact: isCompanyContact,
+            companyAddress: isCompanyAddress,
+          }),
+        })
+          .then(async (res) => {
+            const data = await res.json(); // ✅ read once
 
-  //     // clean the state
-  //   }
-  // };
+            if (!res.ok) {
+              // setIsLogCompanyData(data.error || "Unknown error");
+              // throw new Error(`Server error: ${res.status}`);
+              setLogSuccess(false);
+              setGlobalNotification(true);
+              setSendCompDataLoader(false);
+              setGlobalErrorMessage(data.error || "Unknown error");
+            }
+
+            setIsAddedCompanyData(true);
+            setSendCompDataLoader(false);
+            setGlobalNotification(true);
+
+            setGlobalsuccessMessage("Company Data Added to the Database");
+
+            // if (isAddedCompanyData) {
+            //   setOpenCreditEdit((prev) => !prev);
+            // }
+          })
+          .catch((err) => {
+            // setLogSuccess(true);
+            console.error("Request failed:", err.message);
+          });
+
+        // clean the state
+      }
+    } else {
+      setOpenCreditEdit((prev) => !prev);
+    }
+  };
 
   const SearchSubmitInvoice = () => {
     if (isSelected == -1) {
@@ -405,12 +438,14 @@ export default function Invoice() {
   };
 
   const SumbitCompanyDetails = () => {
+    console.log("creating invoice");
     if (
       !isCompanyName ||
       !isCompanyEmail ||
       !isCompanyContact ||
       isSelected == -1
     ) {
+      console.log("something is missing");
       setFormError("Inputs error - Please check if you inserted data!!!");
     } else {
       // console.log(isCompanyName, isCompanyEmail, isCompanyContact);
@@ -460,9 +495,66 @@ export default function Invoice() {
           });
         }
       });
+
+      setIsCreateInvoice(true);
       // setCompanyName("");
       // setCompanyEmail("");
       // setComapanyContact("");
+    }
+  };
+
+  const AddCreditCard = () => {
+    setSendCreditLoader(true);
+
+    if (
+      !isCardNumber ||
+      !isCompanyEmail ||
+      !isCardHolderName ||
+      !isExpDate ||
+      !isPaymentFrequency
+    ) {
+      setFormError("Inputs error - Please check if you inserted data!!!");
+    } else {
+      fetch("/api/functions/addcreditcard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyEmail: isCompanyEmail,
+          creditCardNumb: isCardNumber,
+          cardHolder: isCardHolderName,
+          expDate: isExpDate,
+          paymentFrequency: isPaymentFrequency,
+        }),
+      })
+        .then(async (res) => {
+          const data = await res.json(); // ✅ read once
+
+          if (!res.ok) {
+            // setIsLogCompanyData(data.error || "Unknown error");
+            // throw new Error(`Server error: ${res.status}`);
+            setLogSuccess(false);
+            setGlobalNotification(true);
+            setSendCreditLoader(false);
+            setGlobalErrorMessage(data.error || "Unknown error");
+          }
+
+          setSendCreditLoader(false);
+          setGlobalNotification(true);
+          setGlobalsuccessMessage("Credit card added!");
+          setOpenCreditEdit(false);
+
+          // if (isAddedCompanyData) {
+          //   setOpenCreditEdit((prev) => !prev);
+          // }
+        })
+        .catch((err) => {
+          // setLogSuccess(true);
+          console.error("Request failed:", err.message);
+        });
+
+      // clean the state
     }
   };
 
@@ -603,7 +695,7 @@ export default function Invoice() {
         >
           <div
             className={`${
-              isRadioSelected == "default" && "bg-[#f0f0f0] dark:bg-[#303030] "
+              isRadioSelected == "default" && "bg-[#f0f0f0] dark:bg-[#242424] "
             } flex items-center gap-3 flex-col p-[10px] md:p-[20px] w-full pt-[10px]  rounded-2xl shadow-sm inset-shadow-sm`}
           >
             <div className="flex flex-row items-center justify-start gap-3 w-[370px]">
@@ -773,7 +865,7 @@ export default function Invoice() {
           <div
             className={`${
               isRadioSelected == "new_company" &&
-              "bg-[#f0f0f0] dark:bg-[#303030] "
+              "bg-[#f0f0f0] dark:bg-[#242424] "
             } flex items-center gap-3 flex-col p-[10px] md:p-[20px] mt-2 rounded-2xl shadow-sm inset-shadow-sm pt-[10px]`}
           >
             <div className="flex fel-row w-[370px] justify-start items-center gap-3">
@@ -847,6 +939,7 @@ export default function Invoice() {
                       <Input
                         name="main_address"
                         type="text"
+                        onChange={(e) => setComapanyAddress(e.target.value)}
                         placeholder="Address..."
                         className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
                       />
@@ -908,20 +1001,44 @@ export default function Invoice() {
                   >
                     <button
                       onClick={() => {
-                        setOpenCreditEdit((prev) => !prev);
+                        AddCompanyData();
                       }}
-                      className="cursor-pointer h-[40px] w-auto px-[20px] rounded-4xl bg-black text-white dark:bg-[#f0f0f0] dark:text-black"
+                      className={`${
+                        isCompanyEmail == "" &&
+                        "opacity-25 transition duration-200 ease-in-out"
+                      } cursor-pointer h-[40px] w-[250px] px-[20px] rounded-4xl ${
+                        !isAddedCompanyData
+                          ? "dark:bg-[#ee3c3c] bg-black"
+                          : "dark:bg-[#4144e4] bg-black"
+                      }  text-white dark:bg-[#ee3c3c] dark:text-white`}
+                      disabled={isCompanyEmail == ""}
                     >
-                      {isReady ? (
-                        <div className="flex flex-row gap-2 items-center">
-                          <Bloader /> <p>linking...</p>
-                        </div>
+                      {!isAddedCompanyData ? (
+                        isSendCompDataLoader ? (
+                          <div className="flex flex-row gap-2 justify-center items-center">
+                            <Bloader /> <p>linking...</p>
+                          </div>
+                        ) : (
+                          "Add Company to Database"
+                        )
                       ) : (
-                        "Add Credit Card"
+                        "Add Credit Card?"
                       )}
                     </button>
                   </motion.div>
                 )}
+                <div className="flex justify-center items-center mt-5">
+                  <div className="w-full flex justify-center items-center mb-[10px] h-auto px-[20px] md:max-w-[85vw] lg:max-w-[80vw]">
+                    <Button
+                      onClick={() => {
+                        SumbitCompanyDetails();
+                      }}
+                      className="cursor-pointer w-[250px] h-[40px] rounded-4xl"
+                    >
+                      Create Invoice
+                    </Button>
+                  </div>
+                </div>
               </motion.div>
 
               {/* <motion.div
@@ -945,21 +1062,35 @@ export default function Invoice() {
           </div>
         </RadioGroup>
 
-        {isOpenCreditEdit && (
+        {/* {isOpenCreditEdit && (
           <div className="mb-[10px]">
             <button
               className="flex mt-[20px] h-[40px] bg-black text-white w-[200px] cursor-pointer dark:bg-[#2e2e2e] rounded-4xl justify-center items-center"
               onClick={() => {
                 setOpenCreditEdit(false);
+                if (searchInputRef.current) {
+                  searchInputRef.current.value = "";
+                  setSearchResults([]);
+                }
               }}
             >
-              Remove Credit Card
+              Cancel
             </button>
           </div>
-        )}
+        )} */}
 
         {isOpenCreditEdit && (
-          <div className="flex gap-4 justify-center flex-col md:flex-row dark:bg-[#575757] bg-[#f0f0f0] shadow-md inset-shadow-sm items-center rounded-2xl md:px-[20px]">
+          <div className="absolute top-0 w-full h-[100%] flex gap-4 justify-center flex-col md:flex-row  shadow-md inset-shadow-sm items-center rounded-2xl md:px-[20px] bg-[#ffffffd5] dark:bg-[#1f1f1fd2]">
+            <div className="mb-[10px]">
+              <button
+                className="flex mt-[20px] h-[40px] bg-black text-white w-[200px] cursor-pointer dark:bg-[#2e2e2e] rounded-4xl justify-center items-center"
+                onClick={() => {
+                  setOpenCreditEdit(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
             <motion.div
               exit={{ opacity: 0 }}
               initial={{ opacity: 0.2 }}
@@ -993,7 +1124,7 @@ export default function Invoice() {
               initial={{ opacity: 0.2 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.2 }}
-              className="md:h-[300px] h-[2px] w-[300px] md:w-[2px] bg-[#fff]"
+              className="md:h-[300px] h-[1px] w-[300px] md:w-[1px] bg-[#fff]"
             ></motion.div>
             <motion.div
               exit={{ opacity: 0 }}
@@ -1011,6 +1142,18 @@ export default function Invoice() {
                       <p className="text-red-600">{isFormErrorCard}</p>
                     </div>
                   )} */}
+                  <div className="flex gap-4 ">
+                    <Label className="w-[100px]">Company Email</Label>
+                    <Input
+                      name="cm_email"
+                      type="text"
+                      ref={inputRef}
+                      value={isCompanyEmail}
+                      disabled
+                      placeholder="Add Card Number Here!... "
+                      className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
+                    />
+                  </div>
 
                   <div className="flex gap-4 ">
                     <Label className="w-[100px]">Card Number</Label>
@@ -1047,8 +1190,54 @@ export default function Invoice() {
                       className="w-full h-[50px] bg-[#ffffff] rounded-3xl inset-shadow-sm inset-shadow-black-900 dark:text-[#ffffff]"
                     />
                   </div>
+
+                  <div className="flex gap-4 ">
+                    <Label className="w-[300px]">Payment Frequency?</Label>
+                    <Select
+                      onValueChange={(value) => {
+                        // console.log("Options: ", value);
+                        setPaymentFrequency(value);
+                      }}
+                    >
+                      <SelectTrigger className="w-[300px] h-[50px] rounded-4xl bg-[#fff] md:w-full justify-between items-center">
+                        <SelectValue
+                          className=" h-[50px]"
+                          placeholder="Select a service"
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="w-[300px]">
+                        <SelectGroup>
+                          <SelectLabel>Service Options</SelectLabel>
+                          {frequencies.map((entry, idx) => (
+                            <div key={idx}>
+                              <SelectItem value={`${entry.value}`}>
+                                {entry.value}
+                              </SelectItem>
+                            </div>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </form>
+              <div className="w-full h-[100px] flex justify-center items-center">
+                <Button
+                  onClick={() => {
+                    AddCreditCard();
+                  }}
+                  className="cursor-pointer rounded-4xl px-[20px]"
+                >
+                  {isSendCreditLoader ? (
+                    <div>
+                      <Bloader />
+                      <p> Adding...</p>
+                    </div>
+                  ) : (
+                    "Add Credit Card"
+                  )}
+                </Button>
+              </div>
             </motion.div>
           </div>
         )}
@@ -1095,19 +1284,6 @@ export default function Invoice() {
             </motion.div>
           ))}
         </motion.div> */}
-      </div>
-
-      <div className="flex justify-center items-center mt-5">
-        <div className="w-full flex justify-center items-center mb-[40px] h-auto px-[20px] md:max-w-[85vw] lg:max-w-[80vw]">
-          <Button
-            onClick={() => {
-              SumbitCompanyDetails();
-            }}
-            className="cursor-pointer w-[300px] h-[60px] rounded-4xl"
-          >
-            Create Invoice
-          </Button>
-        </div>
       </div>
     </div>
   );
