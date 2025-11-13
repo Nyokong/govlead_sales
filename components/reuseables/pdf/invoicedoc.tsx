@@ -1,5 +1,5 @@
 import { FlatInvoiceType } from "@/types/next-auth";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Page,
   Text,
@@ -178,19 +178,25 @@ type Props = {
 // Create Document Component
 
 export default function Pdfdownload({ flatlist }: Props) {
-  const fulldatestring = new Date();
-
-  const todaydate = ` ${fulldatestring.getDay()} ${fulldatestring.toLocaleString(
-    "en-ZA",
-    { month: "long" }
-  )} ${fulldatestring.getFullYear()}`;
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-ZA", {
       style: "currency",
       currency: "ZAR",
     }).format(value);
   };
+
+  const [todaydate, setTimestamp] = React.useState<string | null>(null);
+  useEffect(() => {
+    const fulldatestring = new Date();
+
+    setTimestamp(
+      fulldatestring.toLocaleDateString("en-ZA", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    );
+  }, []);
 
   return (
     <Document>
