@@ -40,7 +40,7 @@ const services = [
   { id: 1, name: "Websites", price: 10000, frequency: "frequent" },
   { id: 2, name: "White-label", price: 3500, frequency: "frequent" },
   { id: 3, name: "Logo Design", price: 2500, frequency: "frequent" },
-  { id: 4, name: "Poster design", price: 2000, frequency: "frequent" },
+  { id: 4, name: "Poster design", price: 1000, frequency: "frequent" },
   { id: 5, name: "Photography", price: 3000, frequency: "frequent" },
   {
     id: 6,
@@ -105,7 +105,7 @@ export default function Invoice() {
   const [isLogSuccess, setLogSuccess] = useState(false);
   // const [isSuccessMsg, setSuccessMsg] = useState("");
   const delay = 3000;
-  const SERVICE_FEE = 500; // constant fee
+  const SERVICE_FEE = 0; // constant fee
   // const [isCreateInvoiceBtn, setInvoiceBtn] = useState(false);
 
   // const [isSearchCompEmail, searchCompanyData] = useState("");

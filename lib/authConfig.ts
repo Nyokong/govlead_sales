@@ -1,8 +1,6 @@
+// auth config
 import Google from "next-auth/providers/google";
-// import Credentials from 'next-auth/providers/credentials';
 import type { NextAuthConfig } from "next-auth";
-// import GoogleProvider from 'next-auth/providers/google';
-// import GoogleProvider from 'next-auth/providers/google';
 import Credentials from "next-auth/providers/credentials";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";

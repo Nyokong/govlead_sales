@@ -34,14 +34,6 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at"),
 });
 
-// export const sessionTable = pgTable("session", {
-//   sessionToken: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-//   userId: text("uID")
-//     .notNull()
-//     .references(() => users.id, { onDelete: "cascade" }),
-//   expires: timestamp("expires", { mode: "date" }).notNull(),
-// });
-
 export const accounts = pgTable("account", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   userId: text("userID")
